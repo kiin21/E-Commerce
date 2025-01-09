@@ -4,7 +4,6 @@ export const getProductsOfStore = async (axiosPrivate, status, page = 1, limit =
       const response = await axiosPrivate.get(`/api/seller/products`, {
           params: { status, page, limit, search, sortField, sortOrder },
       });
-      console.log(response.data);
       return response.data;
   } catch (error) {
       throw new Error(error.response?.data?.message || 'Failed to fetch products by status');
@@ -29,3 +28,12 @@ export const deleteMultipleProductsById = async (axiosPrivate, ids) => {
         throw new Error(error.response?.data?.message || 'Failed to delete products');
     }
 }
+
+export const addProduct = async (axiosPrivate, productData) => {
+    try {
+        const response = await axiosPrivate.post(`/api/seller/products/add`, productData);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to add product');
+    }
+};
