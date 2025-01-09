@@ -15,6 +15,7 @@ import GoogleAuthHandler from './pages/user/GoogleAuthHandlerPage.jsx';
 
 // Seller page components
 import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
+import SellerProductManagement from "./pages/seller/SellerProductManagement.jsx";
 
 const ROLES = {
     User: 'User',
@@ -46,6 +47,9 @@ const App = () => {
                     <Route path="/seller" element={<SellerLayout />}>
                         <Route index element={<Navigate to="dashboard" replace />} />
                         <Route index path="dashboard" element={<SellerDashboard />} />
+                        <Route path="product-management">
+                            <Route index element={<SellerProductManagement />} />
+                        </Route>
                     </Route>
                 </Route>
             </Route>
