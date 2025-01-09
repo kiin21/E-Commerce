@@ -10,3 +10,4 @@ export const getProductsOfStore = async (axiosPrivate, status, page = 1, limit =
       throw new Error(error.response?.data?.message || 'Failed to fetch products by status');
   }
 };
+
