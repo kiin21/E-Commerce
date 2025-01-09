@@ -5,7 +5,7 @@ import Home from "./pages/user/HomePage.jsx";
 import UserLayout from "./layouts/UserLayout.jsx";
 import AuthLayout from "./layouts/AuthLayout";
 import AdminLayout from "./layouts/AdminLayout.jsx";
-// import SellerLayout from "./layouts/SellerLayout.jsx";
+import SellerLayout from "./layouts/SellerLayout.jsx";
 import MissingPage from "./pages/MissingPage.jsx";
 import RequireAuth from "./hooks/RequireAuth";
 import PersistLogin from "./hooks/PersistLogin";
@@ -27,13 +27,13 @@ import SellerDetailPage from "./pages/admin/SellerDetailPage.jsx";
 import SellerProductPage from "./pages/admin/SellerWithProductPage.jsx";
 import SellerAnalyticsPage from "./pages/admin/SellerAnalyticsPage.jsx";
 import SellerEditPage from "./pages/admin/SellerEditPage.jsx";
+import ProductManagement from "./pages/admin/ProductManagementPage.jsx";
+import ProductDetailPage from "./pages/admin/ProductManagementDetailPage.jsx";
 import Cart from "./pages/user/CartPage.jsx";
 // import PaymentPage from "./pages/user/PaymentPage.jsx";
 // import PaymentSuccess from "./components/user/PaymentSuccess.jsx";
 // import PaymentFailure from "./components/user/PaymentFailure.jsx";
 
-// import ProductManagement from "./pages/admin/ProductManagementPage.jsx";
-// import ProductDetailPage from "./pages/admin/ProductManagementDetailPage.jsx";
 
 // Seller page components
 import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
