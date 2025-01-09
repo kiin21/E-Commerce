@@ -4,6 +4,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userReducer from "./reducers/user";
 import adminReducer from "./reducers/admin";
+// import sellerReducer from "./reducers/seller";
 
 const persistConfig = {
     key: "root",
@@ -17,6 +18,7 @@ const store = configureStore({
     reducer: {
         user: persistedUserReducer,
         admin: adminReducer,
+        // seller: sellerReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

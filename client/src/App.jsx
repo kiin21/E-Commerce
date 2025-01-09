@@ -1,11 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/user/RegisterPage.jsx";
 import Login from "./pages/user/LoginPage.jsx";
-import Home from "./pages/user/HomePage.jsx";
-import UserLayout from "./layouts/UserLayout.jsx";
+// import Home from "./pages/user/HomePage.jsx";
+// import UserLayout from "./layouts/UserLayout.jsx";
 import AuthLayout from "./layouts/AuthLayout";
-import AdminLayout from "./layouts/AdminLayout.jsx";
-// import SellerLayout from "./layouts/SellerLayout.jsx";
+import SellerLayout from "./layouts/SellerLayout.jsx";
 import MissingPage from "./pages/MissingPage.jsx";
 import RequireAuth from "./hooks/RequireAuth";
 import PersistLogin from "./hooks/PersistLogin";
@@ -36,6 +35,11 @@ import Cart from "./pages/user/CartPage.jsx";
 // import ProductDetailPage from "./pages/admin/ProductManagementDetailPage.jsx";
 
 
+// Seller page components
+import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
+import SellerProductManagement from "./pages/seller/SellerProductManagement.jsx";
+import SellerAddProduct from "./pages/seller/SellerAddProduct.jsx";
+
 const ROLES = {
     User: 'User',
     Seller: 'Seller',
@@ -47,24 +51,30 @@ const App = () => {
         <Routes>
             <Route element={<PersistLogin />}>
                 {/* USER ROUTE */}
-                <Route path="/" element={<UserLayout />}>
+                {/* <Route path="/" element={<UserLayout />}>
                     <Route index element={<Home />} />
-               
-                </Route>
+                </Route> */}
 
                 {/* USER ROUTE RequireAuth */}
                 <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Admin]} />}>
-                  
+
                 </Route>
 
                 {/* ADMIN ROUTES */}
                 <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-                   
+
                 </Route>
-                
+
                 {/* SELLER ROUTE */}
                 <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
-                   
+                    <Route path="/seller" element={<SellerLayout />}>
+                        <Route index element={<Navigate to="dashboard" replace />} />
+                        <Route index path="dashboard" element={<SellerDashboard />} />
+                        <Route path="product-management">
+                            <Route index element={<SellerProductManagement />} />
+                            <Route path="add" element={<SellerAddProduct />} />
+                        </Route>
+                    </Route>
                 </Route>
             </Route>
 
@@ -76,7 +86,7 @@ const App = () => {
             </Route>
             <Route path="/auth/forget-password" element={<ForgetPassword />} />
             <Route path="/auth/reset-password" element={<ResetPassword />} />
-            <Route path="/auth/register/verify-otp" element={<OTPVerification />}  />
+            <Route path="/auth/register/verify-otp" element={<OTPVerification />} />
             <Route path="/auth/google/callback" element={<GoogleAuthHandler />} />
 
             {/* ERROR PAGES */}
