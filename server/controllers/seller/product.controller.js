@@ -171,7 +171,7 @@ const addProductToStore = async (req, res) => {
 
         const newProduct = await Product.create(productData);
 
-        await addNotification(productData.current_seller.id, productData.name);
+        // await addNotification(productData.current_seller.id, productData.name);
 
         res.status(201).json({
             message: 'Thêm sản phẩm thành công, chờ admin duyệt',
