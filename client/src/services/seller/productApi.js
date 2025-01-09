@@ -37,3 +37,12 @@ export const addProduct = async (axiosPrivate, productData) => {
         throw new Error(error.response?.data?.message || 'Failed to add product');
     }
 };
+
+export const getProductById = async (axiosPrivate, id) => {
+    try {
+        const response = await axiosPrivate.get(`/api/seller/products/detail/${id}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch product detail');
+    }
+};
