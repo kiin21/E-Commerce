@@ -4,8 +4,8 @@ import Login from "./pages/user/LoginPage.jsx";
 import Home from "./pages/user/HomePage.jsx";
 import UserLayout from "./layouts/UserLayout.jsx";
 import AuthLayout from "./layouts/AuthLayout";
-import AdminLayout from "./layouts/AdminLayout";
-import SellerLayout from "./layouts/SellerLayout.jsx";
+import AdminLayout from "./layouts/AdminLayout.jsx";
+// import SellerLayout from "./layouts/SellerLayout.jsx";
 import MissingPage from "./pages/MissingPage.jsx";
 import RequireAuth from "./hooks/RequireAuth";
 import PersistLogin from "./hooks/PersistLogin";
@@ -27,24 +27,14 @@ import SellerManagement from "./pages/admin/SellerManagementPage.jsx";
 import SellerDetailPage from "./pages/admin/SellerDetailPage.jsx";
 import SellerProductPage from "./pages/admin/SellerWithProductPage.jsx";
 import Cart from "./pages/user/CartPage.jsx";
-import PaymentPage from "./pages/user/PaymentPage.jsx";
-import PaymentSuccess from "./components/user/PaymentSuccess.jsx";
-import PaymentFailure from "./components/user/PaymentFailure.jsx";
-import SellerAnalyticsPage from "./pages/admin/SellerAnalyticsPage.jsx";
-import SellerEditPage from "./pages/admin/SellerEditPage.jsx";
-import ProductManagement from "./pages/admin/ProductManagementPage.jsx";
-import ProductDetailPage from "./pages/admin/ProductManagementDetailPage.jsx";
+// import PaymentPage from "./pages/user/PaymentPage.jsx";
+// import PaymentSuccess from "./components/user/PaymentSuccess.jsx";
+// import PaymentFailure from "./components/user/PaymentFailure.jsx";
+// import SellerAnalyticsPage from "./pages/admin/SellerAnalyticsPage.jsx";
+// import SellerEditPage from "./pages/admin/SellerEditPage.jsx";
+// import ProductManagement from "./pages/admin/ProductManagementPage.jsx";
+// import ProductDetailPage from "./pages/admin/ProductManagementDetailPage.jsx";
 
-
-// Seller page components
-import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
-import SellerProductManagement from "./pages/seller/SellerProductManagement.jsx";
-import SellerProductDetail from "./pages/seller/SellerProductDetail.jsx";
-import SellerAddProduct from "./pages/seller/SellerAddProduct.jsx";
-import SellerVoucher from "./pages/seller/SellerVoucher.jsx";
-import SellerEditProduct from "./pages/seller/SellerEditProduct.jsx";
-import SellerInfo from "./pages/seller/SellerInfo.jsx";
-import SellerOrder from "./pages/seller/SellerOrder.jsx";
 
 const ROLES = {
     User: 'User',
