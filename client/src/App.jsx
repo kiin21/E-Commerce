@@ -1,10 +1,11 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/user/RegisterPage.jsx";
 import Login from "./pages/user/LoginPage.jsx";
-// import Home from "./pages/user/HomePage.jsx";
-// import UserLayout from "./layouts/UserLayout.jsx";
+import Home from "./pages/user/HomePage.jsx";
+import UserLayout from "./layouts/UserLayout.jsx";
 import AuthLayout from "./layouts/AuthLayout";
-import SellerLayout from "./layouts/SellerLayout.jsx";
+import AdminLayout from "./layouts/AdminLayout.jsx";
+// import SellerLayout from "./layouts/SellerLayout.jsx";
 import MissingPage from "./pages/MissingPage.jsx";
 import RequireAuth from "./hooks/RequireAuth";
 import PersistLogin from "./hooks/PersistLogin";
@@ -34,7 +35,6 @@ import Cart from "./pages/user/CartPage.jsx";
 // import ProductManagement from "./pages/admin/ProductManagementPage.jsx";
 // import ProductDetailPage from "./pages/admin/ProductManagementDetailPage.jsx";
 
-
 // Seller page components
 import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
 import SellerProductManagement from "./pages/seller/SellerProductManagement.jsx";
@@ -51,9 +51,10 @@ const App = () => {
         <Routes>
             <Route element={<PersistLogin />}>
                 {/* USER ROUTE */}
-                {/* <Route path="/" element={<UserLayout />}>
+                <Route path="/" element={<UserLayout />}>
                     <Route index element={<Home />} />
-                </Route> */}
+
+                </Route>
 
                 {/* USER ROUTE RequireAuth */}
                 <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Admin]} />}>
@@ -62,7 +63,31 @@ const App = () => {
 
                 {/* ADMIN ROUTES */}
                 <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-
+                    <Route path="/admin" element={<AdminLayout />}>
+                        {/* Redirect to /admin/dashboards */}
+                        <Route index element={<Navigate to="/admin/dashboards" replace />} />
+                        {/* Admin Dashboards */}
+                        <Route path="dashboards" element={<AdminDashboard />} />
+                        {/* User Management */}
+                        <Route path="user-management" >
+                            <Route index element={<UserManagement />} />
+                            <Route path=":id" element={<UserDetailPage />} />
+                            <Route path=":id/products" element={<UserWithOrderPage />} />
+                        </Route>
+                        {/* Seller Management */}
+                        <Route path="seller-management">
+                            <Route index element={<SellerManagement />} />
+                            <Route path=":id" element={<SellerDetailPage />} />
+                            <Route path=":id/products" element={<SellerProductPage />} />
+                            <Route path=":id/edit" element={<SellerEditPage />} />
+                            <Route path=":id/analytics" element={<SellerAnalyticsPage />} />
+                        </Route>
+                        {/* Product Management */}
+                        <Route path="product-management" >
+                            <Route index element={<ProductManagement />} />
+                            <Route path=":id" element={<ProductDetailPage />} />
+                        </Route>
+                    </Route>
                 </Route>
 
                 {/* SELLER ROUTE */}
