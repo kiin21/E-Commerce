@@ -246,10 +246,35 @@ const getProductById = async (req, res) => {
     }
 };
 
+const updateProduct = async (req, res) => {
+    const productId = req.params.productId;
+    const updateData = req.body;
+
+    try {
+        const product = await Product.findByPk(productId);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        const updatedProduct = await product.update(updateData);
+
+        res.status(200).json({
+            message: 'Cập nhật sản phẩm thành công',
+            product: updatedProduct,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Lỗi khi cập nhật sản phẩm',
+            error: error.message,
+        });
+    }
+};
+
 module.exports = {
     getAllProductsByStoreId,
     deleteProduct,
     deleteMultipleProducts,
     addProductToStore,
-    getProductById
+    getProductById,
+    updateProduct
 };

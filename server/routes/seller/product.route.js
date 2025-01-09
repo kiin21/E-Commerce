@@ -12,4 +12,6 @@ router.post('/add', productController.addProductToStore);
 
 router.get('/detail/:productId', productController.getProductById);
 
+router.patch('/update/:productId', productController.updateProduct);
+
 module.exports = router;
