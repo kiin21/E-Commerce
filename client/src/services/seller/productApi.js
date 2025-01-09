@@ -46,3 +46,12 @@ export const getProductById = async (axiosPrivate, id) => {
         throw new Error(error.response?.data?.message || 'Failed to fetch product detail');
     }
 };
+
+export const updateProduct = async (axiosPrivate, id, productData) => {
+    try {
+        const response = await axiosPrivate.patch(`/api/seller/products/update/${id}`, productData);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to update product');
+    }
+};
