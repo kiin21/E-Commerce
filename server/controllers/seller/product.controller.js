@@ -146,8 +146,48 @@ const deleteMultipleProducts = async (req, res) => {
     }
 };
 
+// Add a product to the store of seller
+// POST /api/seller/products/add
+const addProductToStore = async (req, res) => {
+    try {
+        const productData = req.body;
+
+        const seller = await Seller.findOne({
+            where: {
+                user_id: req.user.id
+            }
+        });
+
+        if(!seller) {
+            return res.status(400).json({ message: 'Không tìm thấy seller' });
+        }
+
+        if (!productData.current_seller) {
+            productData.current_seller = {};
+        }
+
+        productData.current_seller.id = seller.id;
+        productData.current_seller.store_id = seller.store_id;
+
+        const newProduct = await Product.create(productData);
+
+        await addNotification(productData.current_seller.id, productData.name);
+
+        res.status(201).json({
+            message: 'Thêm sản phẩm thành công, chờ admin duyệt',
+            product: newProduct
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Lỗi server khi thêm sản phẩm',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     getAllProductsByStoreId,
     deleteProduct,
-    deleteMultipleProducts
+    deleteMultipleProducts,
+    addProductToStore
 };

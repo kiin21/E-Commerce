@@ -8,4 +8,6 @@ router.delete('/remove/:productId', productController.deleteProduct);
 
 router.post('/remove-multiple', productController.deleteMultipleProducts);
 
+router.post('/add', productController.addProductToStore);
+
 module.exports = router;
