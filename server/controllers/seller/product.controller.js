@@ -98,6 +98,56 @@ const getAllProductsByStoreId = async (req, res) => {
     }
 };
 
+// Remove a product from a store
+// [DELETE] /api/seller/products/remove/:productId
+const deleteProduct = async (req, res) => {
+    const productId = req.params.productId;
+
+    try {
+        const result = await Product.destroy({
+            where: {
+                id: productId,
+            },
+        });
+
+        if (result === 0) {
+            return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
+        }
+
+        res.status(200).json({ message: "Sản phẩm đã xóa thành công" });
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi khi xóa sản phẩm" });
+    }
+};
+
+// Remove multiple products from a store
+// [POST] /api/seller/products/remove-multiple
+const deleteMultipleProducts = async (req, res) => {
+    const { ids } = req.body;
+
+    try {
+        if (!Array.isArray(ids) || ids.length === 0) {
+            return res.status(400).json({ message: "Không tìm thấy id hợp lệ" });
+        }
+
+        const result = await Product.destroy({
+            where: {
+                id: ids, 
+            },
+        });
+
+        if (result === 0) {
+            return res.status(404).json({ message: "Không tìm thấy sản phẩm để xóa" });
+        }
+
+        res.status(200).json({ message: `${result} sản phẩm đã được xóa thành công` });
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi khi xóa nhiều sản phẩm" });
+    }
+};
+
 module.exports = {
-    getAllProductsByStoreId
+    getAllProductsByStoreId,
+    deleteProduct,
+    deleteMultipleProducts
 };
