@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Card, Space, Input, Tooltip, Button, Typography, Modal, message, Checkbox } from 'antd';
 import { EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { getProductsOfStore } from '../../services/seller/productApi';
+import { deleteMultipleProductsById, deleteProductById, getProductsOfStore } from '../../services/seller/productApi';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const { confirm } = Modal;
@@ -69,6 +69,47 @@ const SellerProductManagement = () => {
 
   const handleEdit = (product) => {
     navigate(`/seller/product-management/edit/${product.id}`);
+  };
+
+  const handleDeleteMultiple = async (ids) => {
+    confirm({
+      title: `Bạn có chắc chắn muốn xóa ${ids.length} sản phẩm này không?`,
+      icon: <ExclamationCircleOutlined />,
+      content: 'Thao tác này không thể hoàn tác.',
+      okText: 'Có',
+      okType: 'danger',
+      cancelText: 'Không',
+      onOk: async () => {
+        try {
+          await deleteMultipleProductsById(axiosPrivate, ids);
+          message.success('Xóa sản phẩm thành công');
+          setSelectedRowKeys([]);
+          loadProducts();
+        } catch (error) {
+          message.error('Lỗi xóa sản phẩm');
+        }
+      },
+    });
+  };
+
+  const handleDelete = (id) => {
+    confirm({
+      title: 'Bạn có chắc chắn muốn xóa sản phẩm này không?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Thao tác này không thể hoàn tác.',
+      okText: 'Có',
+      okType: 'danger',
+      cancelText: 'Không',
+      onOk: async () => {
+        try {
+          await deleteProductById(axiosPrivate, id);
+          message.success('Xóa sản phẩm thành công');
+          loadProducts();
+        } catch (error) {
+          message.error('Lỗi xóa sản phẩm');
+        }
+      },
+    });
   };
 
   const columns = [
