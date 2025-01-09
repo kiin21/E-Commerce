@@ -185,9 +185,71 @@ const addProductToStore = async (req, res) => {
     }
 };
 
+const getProductById = async (req, res) => {
+    const id = req.params.productId;
+
+    if (!id) {
+        return res.status(400).json({ message: 'Cần Product ID' });
+    }
+
+    try {
+        const product = await Product.findByPk(id, {
+            attributes: [
+                'name',
+                'category_id',
+                'category_name',
+                'images', 
+                'discount_rate',
+                'original_price',
+                'short_description',
+                'description',
+                'quantity_sold',
+                'specifications',
+                'rating_average',
+                'price',
+                'inventory_status',
+                'qty',
+            ]
+        });
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Xử lý dữ liệu hình ảnh
+        const images = Array.isArray(product.images)
+            ? product.images
+            : JSON.parse(product.images || '[]');
+        const thumbnails = images.map(image => image.thumbnail_url);
+
+        const productDetail = {
+            name: product.name,
+            category_id: product.category_id,
+            category_name: product.category_name,
+            thumbnails, 
+            discount_rate: product.discount_rate,
+            original_price: product.original_price,
+            short_description: product.short_description,
+            description: product.description,
+            quantity_sold: product.quantity_sold,
+            specifications: product.specifications, 
+            rating_average: product.rating_average,
+            price: product.price,
+            inventory_status: product.inventory_status,
+            qty: product.qty,
+        };
+
+        res.status(200).json({ data: productDetail });
+    } catch (error) {
+        console.error('Error fetching product by ID:', error);
+        res.status(500).json({ message: 'Lỗi server', error: error.message });
+    }
+};
+
 module.exports = {
     getAllProductsByStoreId,
     deleteProduct,
     deleteMultipleProducts,
-    addProductToStore
+    addProductToStore,
+    getProductById
 };

@@ -10,4 +10,6 @@ router.post('/remove-multiple', productController.deleteMultipleProducts);
 
 router.post('/add', productController.addProductToStore);
 
+router.get('/detail/:productId', productController.getProductById);
+
 module.exports = router;
