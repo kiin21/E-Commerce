@@ -270,11 +270,57 @@ const updateProduct = async (req, res) => {
     }
 };
 
+// Get top 10 selling products
+// GET /api/seller/products/:storeId/top-selling/
+const getTopSellingProducts_v1 = async (req, res) => {
+    try {
+        const storeId = req.params.storeId;
+
+        const products = await Product.findAll({
+            where: { 'current_seller.store_id': storeId },
+            order: [['quantity_sold', 'DESC']],
+            limit: 10,
+            attributes: [
+                'id',
+                'name',
+                'images',
+                'category_name',
+                'price',
+                'rating_average',
+                'quantity_sold',
+                'inventory_status'
+            ]
+        });
+
+        const formattedProducts = products.map(product => {
+            const images = Array.isArray(product.images)
+                ? product.images
+                : JSON.parse(product.images || '[]');
+            const thumbnails = images.map(image => image.thumbnail_url);
+            return {
+                id: product.id,
+                name: product.name,
+                category: product.category_name,
+                price: product.price,
+                rating: product.rating_average,
+                quantity_sold: product.quantity_sold,
+                thumbnails
+            };
+        });
+
+        res.status(200).json({ data: formattedProducts });
+    } catch (error) {
+        console.error('Error fetching top 10 best-selling products:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
 module.exports = {
     getAllProductsByStoreId,
     deleteProduct,
     deleteMultipleProducts,
     addProductToStore,
     getProductById,
-    updateProduct
+    updateProduct,
+    getTopSellingProducts_v1
 };
