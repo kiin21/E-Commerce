@@ -15,6 +15,9 @@ const sellerRoutes = (app) => {
 
     // Routes for seller info
     app.use('/api/seller/info', require('./info.route'));
+
+    // Routes for vouchers
+    app.use('/api/seller/voucher', require('./voucher.route'));
 }
 
 module.exports = sellerRoutes;
