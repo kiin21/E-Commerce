@@ -19,6 +19,7 @@ import SellerProductManagement from "./pages/seller/SellerProductManagement.jsx"
 import SellerAddProduct from "./pages/seller/SellerAddProduct.jsx";
 import SellerProductDetail from "./pages/seller/SellerProductDetail.jsx";
 import SellerEditProduct from "./pages/seller/SellerEditProduct.jsx";
+import SellerInfo from "./pages/seller/SellerInfo.jsx";
 
 const ROLES = {
     User: 'User',
@@ -56,6 +57,7 @@ const App = () => {
                             <Route path="add" element={<SellerAddProduct />} />
                             <Route path="edit/:productId" element={<SellerEditProduct />} />
                         </Route>
+                        <Route path="info" element={<SellerInfo />} />
                     </Route>
                 </Route>
             </Route>

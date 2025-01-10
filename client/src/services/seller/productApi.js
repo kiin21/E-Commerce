@@ -55,3 +55,12 @@ export const updateProduct = async (axiosPrivate, id, productData) => {
         throw new Error(error.response?.data?.message || 'Failed to update product');
     }
 };
+
+export const getTopSellingProducts = async (axiosPrivate, storeId) => {
+    try {
+        const response = await axiosPrivate.get(`/api/seller/products/${storeId}/top-selling`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch top-selling products');
+    }
+};
