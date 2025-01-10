@@ -9,6 +9,12 @@ const sellerRoutes = (app) => {
 
     // Routes for categories
     app.use('/api/seller/categories', require('./category.route'));
+
+    // Routes for store
+    app.use('/api/seller/store', require('./store.route'));
+
+    // Routes for seller info
+    app.use('/api/seller/info', require('./info.route'));
 }
 
 module.exports = sellerRoutes;
