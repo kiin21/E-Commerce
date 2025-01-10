@@ -86,3 +86,50 @@ export const getAllProducts = async ({axiosPrivate,  page = 1, limit = 10, searc
         throw new Error(error.response?.data?.message || 'Failed to fetch products');
     }
 };
+
+export const getTopSellingProductInDashboard = async (axiosPrivate, currentPage, pageSize) => {
+    try {
+        const response = await axiosPrivate.get(`/api/seller/products/top-selling/`, {
+            params: { currentPage, pageSize },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch top-selling products');
+    }
+};
+
+export const getTotalProducts = async (axiosPrivate) => {
+    try {
+        const response = await axiosPrivate.get(`/api/seller/products/total`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch total products');
+    }
+};
+
+export const getTotalFollowers = async (axiosPrivate) => {
+    try {
+        const response = await axiosPrivate.get(`/api/seller/followers/total`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch total followers');
+    }
+};
+
+export const getTotalReviews = async (axiosPrivate) => {
+    try {
+        const response = await axiosPrivate.get(`/api/seller/reviews/total`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch total reviews');
+    }
+};
+
+export const getTotalRevenue = async (axiosPrivate) => {
+    try {
+        const response = await axiosPrivate.get(`/api/seller/revenue/total`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch total revenue');
+    }
+};

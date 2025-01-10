@@ -172,7 +172,7 @@ const SellerVoucher = () => {
       icon: <ExclamationCircleOutlined />,
       content: 'Hành động này không thể hoàn tác',
       okText: 'Có',
-      okType: 'Cảnh báo',
+      okType: 'danger',
       cancelText: 'Không',
       onOk: async () => {
         try {
