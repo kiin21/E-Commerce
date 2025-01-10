@@ -64,3 +64,25 @@ export const getTopSellingProducts = async (axiosPrivate, storeId) => {
         throw new Error(error.response?.data?.message || 'Failed to fetch top-selling products');
     }
 };
+
+export const getAllProducts = async ({axiosPrivate,  page = 1, limit = 10, search = '' }) => {
+    try {
+        const response = await axiosPrivate.get(`/api/seller/products`, {
+            params: { page, limit, search },
+        });
+
+        if (response.data && Array.isArray(response.data.data)) {
+            return {
+                data: response.data.data,
+                total: response.data.total,
+                page: response.data.page,
+                limit: response.data.limit,
+            };
+        } else {
+            throw new Error('Invalid response structure');
+        }
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        throw new Error(error.response?.data?.message || 'Failed to fetch products');
+    }
+};
