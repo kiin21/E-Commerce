@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { Form, Input, InputNumber, Button, Upload, Select, Typography, Space, Table, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { getProductById, updateProduct } from '../../services/seller/productApi';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Form, Input, InputNumber, Button, Select, Upload, message, Space, Table, Typography } from 'antd';
 import { UploadOutlined, MinusCircleOutlined, PlusOutlined, CloseOutlined } from '@ant-design/icons';
-import { addProduct } from '../../services/seller/productApi';
-import { uploadImages } from '../../helpers/upload';
-import { useNavigate } from 'react-router-dom';
 import useCategories from '../../hooks/useCategories';
+import { uploadImages } from '../../helpers/upload';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import slugify from 'slugify';
 import { RichTextEditor } from '../../components/seller/RichTextEditor';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
-const SellerAddProduct = () => {
+
+const SellerEditProduct = () => {
+  const { productId } = useParams();
   const [form] = Form.useForm();
-  const [editorContent, setEditorContent] = useState('');
   const [previewImages, setPreviewImages] = useState([]);
   const [imageUploads, setImageUploads] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -23,9 +23,51 @@ const SellerAddProduct = () => {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { categories } = useCategories(searchTerm, 1, 50);
+  const [description, setDescription] = useState("");
 
-  const [content, setContent] = useState('');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const productResponse = await getProductById(axiosPrivate, productId);
+        const product = productResponse.data;
 
+        form.setFieldsValue({
+          name: product.name,
+          discount_rate: product.discount_rate,
+          original_price: parseFloat(product.original_price),
+          short_description: product.short_description,
+          description: product.description,
+          qty: product.qty,
+        });
+        setDescription(product.description);
+
+        const parsedSpecifications = Array.isArray(product.specifications)
+          ? product.specifications
+          : JSON.parse(product.specifications || '[]');
+        setSpecifications(parsedSpecifications);
+
+        const thumbnails = product.thumbnails || [];
+        const formattedThumbnails = thumbnails.map((url, index) => ({
+          uid: `existing-${index}`,
+          name: url.split('/').pop(),
+          status: 'done',
+          url: url,
+        }));
+
+        setPreviewImages(formattedThumbnails);
+        setSelectedCategory({ value: product.category_id, label: product.category_name });
+
+        form.setFieldsValue({
+          category: product.category_id,
+        });
+      } catch (error) {
+        console.error('Error loading product:', error);
+        message.error('Không thể tải dữ liệu sản phẩm!');
+      }
+    };
+
+    fetchData();
+  }, [productId, form]);
 
   const handleImageChange = ({ fileList }) => {
     if (fileList.length > 8) {
@@ -43,16 +85,12 @@ const SellerAddProduct = () => {
     setImageUploads(fileList.filter((file) => file.originFileObj).map((file) => file.originFileObj));
   };
 
-  let showLimitWarning = false;
-
   const handleRemoveImage = (file) => {
     setPreviewImages(previewImages.filter((img) => img.uid !== file.uid));
     setImageUploads(imageUploads.filter((upload) => upload.name !== file.name));
-
-    if (showLimitWarning) {
-      showLimitWarning = false;
-    }
   };
+
+  let showLimitWarning = false;
 
   const validateFileTypeAndLimit = (file, fileList) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -67,13 +105,20 @@ const SellerAddProduct = () => {
       message.error('Bạn đã đạt giới hạn 8 ảnh. Không thể thêm ảnh mới.');
       return Upload.LIST_IGNORE;
     }
+
+
     return false;
   };
 
   const onSubmit = async (values) => {
     try {
       const newImageUrls = await uploadImages(imageUploads);
-      const formattedImages = newImageUrls.map((img) => ({ thumbnail_url: img.thumbnail_url }));
+      const existingImageUrls = previewImages
+        .filter((img) => img.uid.startsWith('existing'))
+        .map((img) => img.url);
+
+      const allImageUrls = [...existingImageUrls, ...newImageUrls.map((img) => img.thumbnail_url)];
+      const formattedImages = allImageUrls.map((url) => ({ thumbnail_url: url }));
 
       const formattedSpecifications = specifications
         .filter((spec) => spec.name.trim() !== '')
@@ -84,33 +129,31 @@ const SellerAddProduct = () => {
           ),
         }));
 
-      const productData = {
+      const updatedData = {
         ...values,
-        qty: values.qty || 1,
+        description: description,
         category_id: selectedCategory?.value,
         category_name: selectedCategory?.label,
-        specifications: formattedSpecifications,
         images: formattedImages,
-        thumbnail_url: formattedImages[0]?.thumbnail_url || '',
+        thumbnail_url: allImageUrls[0] || '',
         price: values.original_price * (1 - (values.discount_rate || 0) / 100),
-        url_key: slugify(values.name, { lower: true, strict: true }) || '',
-        inventory_status: 'pending',
-        rating_average: 0.0,
+        specifications: formattedSpecifications,
       };
 
-      const response = await addProduct(axiosPrivate, productData);
+      const response = await updateProduct(axiosPrivate, productId, updatedData);
       message.success(response.message);
       navigate('/seller/product-management');
     } catch (error) {
-      console.error('Error adding product:', error);
-      message.error('Có lỗi xảy ra khi thêm sản phẩm!');
+      console.error('Error updating product:', error);
+      message.error('Có lỗi xảy ra khi cập nhật sản phẩm!');
     }
   };
+
 
   return (
     <div className="container mx-auto p-4">
       <Button onClick={() => navigate(-1)} className="mb-4" icon={<MinusCircleOutlined />}>Quay lại</Button>
-      <Typography.Title level={2} className="text-center">Thêm Sản Phẩm Mới</Typography.Title>
+      <Typography.Title level={2} className="text-center">Chỉnh Sửa Sản Phẩm</Typography.Title>
       <Form form={form} layout="vertical" onFinish={onSubmit}>
         <Form.Item
           name="name"
@@ -129,11 +172,12 @@ const SellerAddProduct = () => {
             showSearch
             placeholder="Chọn danh mục"
             filterOption={false}
-            onSearch={setSearchTerm}
+            onSearch={(value) => setSearchTerm(value)}
             onChange={(value) => {
               const category = categories.find((cat) => cat.id === value);
               if (category) {
                 setSelectedCategory({ value: category.id, label: category.name });
+                form.setFieldsValue({ category: category.id });
               }
             }}
           >
@@ -158,7 +202,7 @@ const SellerAddProduct = () => {
           ]}
         >
           <Upload
-            accept="image/*"
+            accept='image/*'
             listType="picture-card"
             fileList={previewImages}
             onChange={handleImageChange}
@@ -180,69 +224,29 @@ const SellerAddProduct = () => {
           label="Tỷ lệ giảm giá (%)"
           rules={[{ type: 'number', min: 0, max: 100, message: 'Tỷ lệ giảm giá phải từ 0 đến 100' }]}
         >
-          <InputNumber
-            className="w-full"
-            placeholder="Nhập tỷ lệ giảm giá"
-            onKeyDown={(event) => {
-              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'];
-
-              // Kiểm tra nếu không phải số và không nằm trong danh sách allowedKeys
-              if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
-                event.preventDefault();
-              }
-            }}
-          />
+          <InputNumber className="w-full" placeholder="Nhập tỷ lệ giảm giá" />
         </Form.Item>
 
         <Form.Item
           name="original_price"
           label="Giá gốc"
-          rules={[{ required: true, message: 'Giá gốc là bắt buộc' },
-          { type: 'number', min: 0, message: 'Giá gốc phải lớn hơn 0' }
-          ]}
+          rules={[{ required: true, message: 'Giá gốc là bắt buộc' }]}
         >
-          <InputNumber
-            className="w-full"
-            placeholder="Nhập giá gốc"
-            onKeyDown={(event) => {
-              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'];
-
-              // Kiểm tra nếu không phải số và không nằm trong danh sách allowedKeys
-              if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
-                event.preventDefault();
-              }
-            }}
-          />
+          <InputNumber className="w-full" placeholder="Nhập giá gốc" />
         </Form.Item>
 
         <Form.Item name="short_description" label="Miêu tả ngắn">
-          <TextArea rows={3} placeholder="Nhập miêu tả ngắn" />
+          <Input.TextArea rows={3} placeholder="Nhập miêu tả ngắn" />
         </Form.Item>
 
         <Form.Item
           name="description"
           label="Miêu tả chi tiết"
-          rules={[
-            {
-              required: false,
-              message: 'Vui lòng nhập miêu tả chi tiết',
-            },
-            {
-              validator: (_, value) => {
-                if (value && value.trim() === '') {
-                  return Promise.reject('Nội dung không được để trống');
-                }
-                return Promise.resolve();
-              },
-            },
-          ]}
+          initialValue={description}
         >
           <RichTextEditor
-            value={editorContent}
-            onChange={(content) => {
-              setEditorContent(content);
-              form.setFieldsValue({ description: content });
-            }}
+            value={description}
+            onChange={(newValue) => setDescription(newValue)}
           />
         </Form.Item>
 
@@ -250,20 +254,8 @@ const SellerAddProduct = () => {
           name="qty"
           label="Số lượng"
           rules={[{ type: 'number', min: 1, max: 1000, message: 'Số lượng phải lớn hơn 0, bé hơn 1000' }]}
-
         >
-          <InputNumber
-            className="w-full"
-            placeholder="Nhập số lượng"
-            onKeyDown={(event) => {
-              const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'];
-
-              // Kiểm tra nếu không phải số và không nằm trong danh sách allowedKeys
-              if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
-                event.preventDefault();
-              }
-            }}
-          />
+          <InputNumber className="w-full" placeholder="Nhập số lượng" />
         </Form.Item>
 
         <Typography.Title level={4}>Thông số</Typography.Title>
@@ -366,11 +358,11 @@ const SellerAddProduct = () => {
         </Button>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" block>Thêm sản phẩm</Button>
+          <Button type="primary" htmlType="submit" block>Lưu thay đổi</Button>
         </Form.Item>
       </Form>
     </div>
   );
 };
 
-export default SellerAddProduct;
+export default SellerEditProduct;

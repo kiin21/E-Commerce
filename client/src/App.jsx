@@ -39,6 +39,11 @@ import Cart from "./pages/user/CartPage.jsx";
 import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
 import SellerProductManagement from "./pages/seller/SellerProductManagement.jsx";
 import SellerAddProduct from "./pages/seller/SellerAddProduct.jsx";
+import SellerProductDetail from "./pages/seller/SellerProductDetail.jsx";
+import SellerEditProduct from "./pages/seller/SellerEditProduct.jsx";
+import SellerInfo from "./pages/seller/SellerInfo.jsx";
+import SellerVoucher from "./pages/seller/SellerVoucher.jsx";
+import SellerOrder from "./pages/seller/SellerOrder.jsx";
 
 const ROLES = {
     User: 'User',
@@ -97,8 +102,13 @@ const App = () => {
                         <Route index path="dashboard" element={<SellerDashboard />} />
                         <Route path="product-management">
                             <Route index element={<SellerProductManagement />} />
+                            <Route path="detail/:productId" element={<SellerProductDetail />} />
                             <Route path="add" element={<SellerAddProduct />} />
+                            <Route path="edit/:productId" element={<SellerEditProduct />} />
                         </Route>
+                        <Route path="order" element={<SellerOrder />} />
+                        <Route path="voucher" element={<SellerVoucher />} />
+                        <Route path="info" element={<SellerInfo />} />
                     </Route>
                 </Route>
             </Route>
