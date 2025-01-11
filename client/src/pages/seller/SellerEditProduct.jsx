@@ -6,37 +6,11 @@ import { UploadOutlined, MinusCircleOutlined, PlusOutlined, CloseOutlined } from
 import useCategories from '../../hooks/useCategories';
 import { uploadImages } from '../../helpers/upload';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import { RichTextEditor } from '../../components/seller/RichTextEditor';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, 3, false] }],
-    [{ size: ['small', false, 'large', 'huge'] }],
-    ['bold', 'italic', 'underline', 'strike'],
-    [{ color: [] }, { background: [] }],
-    [{ list: 'ordered' }, { list: 'bullet' }],
-    [{ align: [] }],
-    ['image'],
-  ],
-};
-
-const formats = [
-  'header',
-  'size',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'color',
-  'background',
-  'list',
-  'bullet',
-  'align',
-  'image',
-];
 
 const SellerEditProduct = () => {
   const { productId } = useParams();
@@ -46,10 +20,10 @@ const SellerEditProduct = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [specifications, setSpecifications] = useState([]);
-  const [detailedDescription, setDetailedDescription] = useState('');
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { categories } = useCategories(searchTerm, 1, 50);
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,10 +36,10 @@ const SellerEditProduct = () => {
           discount_rate: product.discount_rate,
           original_price: parseFloat(product.original_price),
           short_description: product.short_description,
+          description: product.description,
           qty: product.qty,
         });
-
-        setDetailedDescription(product.description);
+        setDescription(product.description);
 
         const parsedSpecifications = Array.isArray(product.specifications)
           ? product.specifications
@@ -157,13 +131,13 @@ const SellerEditProduct = () => {
 
       const updatedData = {
         ...values,
+        description: description,
         category_id: selectedCategory?.value,
         category_name: selectedCategory?.label,
         images: formattedImages,
         thumbnail_url: allImageUrls[0] || '',
         price: values.original_price * (1 - (values.discount_rate || 0) / 100),
         specifications: formattedSpecifications,
-        description: detailedDescription,
       };
 
       const response = await updateProduct(axiosPrivate, productId, updatedData);
@@ -174,6 +148,7 @@ const SellerEditProduct = () => {
       message.error('Có lỗi xảy ra khi cập nhật sản phẩm!');
     }
   };
+
 
   return (
     <div className="container mx-auto p-4">
@@ -267,14 +242,11 @@ const SellerEditProduct = () => {
         <Form.Item
           name="description"
           label="Miêu tả chi tiết"
+          initialValue={description}
         >
-          <ReactQuill
-            value={detailedDescription}
-            onChange={setDetailedDescription}
-            theme="snow"
-            modules={modules}
-            formats={formats}
-            style={{ height: '200px', marginBottom: '20px' }}
+          <RichTextEditor
+            value={description}
+            onChange={(newValue) => setDescription(newValue)}
           />
         </Form.Item>
 

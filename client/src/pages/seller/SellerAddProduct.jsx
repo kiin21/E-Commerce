@@ -7,55 +7,31 @@ import { useNavigate } from 'react-router-dom';
 import useCategories from '../../hooks/useCategories';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import slugify from 'slugify';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import { RichTextEditor } from '../../components/seller/RichTextEditor';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
-// Định dạng cho trường mô tả chi tiết dùng react-quill
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, 3, false] }],
-    [{ size: ['small', false, 'large', 'huge'] }],
-    ['bold', 'italic', 'underline', 'strike'],
-    [{ color: [] }, { background: [] }],
-    [{ list: 'ordered' }, { list: 'bullet' }],
-    [{ align: [] }],
-    ['image']
-  ],
-};
-
-const formats = [
-  'header',
-  'size',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'color',
-  'background',
-  'list',
-  'bullet',
-  'align',
-  'image'
-];
-
-
-
 const SellerAddProduct = () => {
   const [form] = Form.useForm();
+  const [editorContent, setEditorContent] = useState('');
   const [previewImages, setPreviewImages] = useState([]);
   const [imageUploads, setImageUploads] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [specifications, setSpecifications] = useState([]);
-  const [detailedDescription, setDetailedDescription] = useState('');
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { categories } = useCategories(searchTerm, 1, 50);
 
+  const [content, setContent] = useState('');
+
+
   const handleImageChange = ({ fileList }) => {
+    if (fileList.length > 8) {
+      fileList = fileList.slice(0, 8);
+    }
+
     const updatedPreviews = fileList.map((file) => ({
       uid: file.uid,
       name: file.name || file.url.split('/').pop(),
@@ -65,22 +41,33 @@ const SellerAddProduct = () => {
     }));
     setPreviewImages(updatedPreviews);
     setImageUploads(fileList.filter((file) => file.originFileObj).map((file) => file.originFileObj));
-    form.setFieldsValue({ images: updatedPreviews });
   };
+
+  let showLimitWarning = false;
 
   const handleRemoveImage = (file) => {
     setPreviewImages(previewImages.filter((img) => img.uid !== file.uid));
     setImageUploads(imageUploads.filter((upload) => upload.name !== file.name));
-    form.setFieldsValue({ images: updatedPreviews });
+
+    if (showLimitWarning) {
+      showLimitWarning = false;
+    }
   };
 
-  const validateFileType = (file) => {
+  const validateFileTypeAndLimit = (file, fileList) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
     if (!allowedTypes.includes(file.type)) {
       message.error(`${file.name} không phải là định dạng ảnh hợp lệ!`);
-      return Upload.LIST_IGNORE; // Ngăn file không được upload
+      return Upload.LIST_IGNORE;
     }
-    return false; // Ngăn Ant Design upload tự động, nhưng vẫn thêm vào danh sách
+
+    if (fileList.length >= 8 && !showLimitWarning) {
+      showLimitWarning = true;
+      message.error('Bạn đã đạt giới hạn 8 ảnh. Không thể thêm ảnh mới.');
+      return Upload.LIST_IGNORE;
+    }
+    return false;
   };
 
   const onSubmit = async (values) => {
@@ -103,7 +90,6 @@ const SellerAddProduct = () => {
         category_id: selectedCategory?.value,
         category_name: selectedCategory?.label,
         specifications: formattedSpecifications,
-        description: detailedDescription,
         images: formattedImages,
         thumbnail_url: formattedImages[0]?.thumbnail_url || '',
         price: values.original_price * (1 - (values.discount_rate || 0) / 100),
@@ -177,7 +163,7 @@ const SellerAddProduct = () => {
             fileList={previewImages}
             onChange={handleImageChange}
             onRemove={handleRemoveImage}
-            beforeUpload={validateFileType}
+            beforeUpload={(file, fileList) => validateFileTypeAndLimit(file, fileList)}
             multiple
           >
             {previewImages.length < 8 && (
@@ -235,15 +221,28 @@ const SellerAddProduct = () => {
 
         <Form.Item
           name="description"
-          label="Nhập miêu tả chi tiết"
+          label="Miêu tả chi tiết"
+          rules={[
+            {
+              required: false,
+              message: 'Vui lòng nhập miêu tả chi tiết',
+            },
+            {
+              validator: (_, value) => {
+                if (value && value.trim() === '') {
+                  return Promise.reject('Nội dung không được để trống');
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
         >
-          <ReactQuill
-            value={detailedDescription}
-            onChange={setDetailedDescription}
-            theme="snow"
-            modules={modules}
-            formats={formats}
-            style={{ height: '200px', marginBottom: '20px' }}
+          <RichTextEditor
+            value={editorContent}
+            onChange={(content) => {
+              setEditorContent(content);
+              form.setFieldsValue({ description: content });
+            }}
           />
         </Form.Item>
 
