@@ -64,4 +64,26 @@ const handlePaymentReturn = async (axiosPrivate, queryParams) => {
     }
 };
 
-export { handleCheckout, createPaymentUrl, handlePaymentReturn };
+const performSubsystemPayment = async (axiosPrivate, amount, userId) => {
+    try {
+        // Call main server's payment endpoint instead of payment server directly
+        const response = await axiosPrivate.post(`/api/payment/subsystem/process`, {
+            fromAccountId: userId,
+            toAccountId: 1,
+            amount: amount,
+        });
+
+        if (!response.data.success) {
+            alert("Failed to process payment");
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error(error);
+        alert("Failed to process payment");
+        return false;
+    }
+};
+
+export { handleCheckout, createPaymentUrl, handlePaymentReturn, performSubsystemPayment };
