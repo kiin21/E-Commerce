@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const sequelize = require('./config/db');
 const authenticateJWT = require('./middlewares/authenticateJWT');
 
@@ -18,7 +20,14 @@ const PORT = process.env.PORT;
 
 sequelize.authenticate()
   .then(() => {
-    app.listen(PORT, () => {
+    // Read SSL certificate and key
+    const sslOptions = {
+      key: fs.readFileSync(process.env.SSL_KEY_PATH),
+      cert: fs.readFileSync(process.env.SSL_CERT_PATH)
+    };
+
+    // Create HTTPS server
+    https.createServer(sslOptions, app).listen(PORT, () => {
       console.log(`Payment server running on port ${PORT}`);
     });
   })

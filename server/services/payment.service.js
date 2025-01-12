@@ -1,5 +1,6 @@
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
+const https = require('https');
 
 const createPaymentAccount = async (userId) => {
     try {
@@ -10,6 +11,9 @@ const createPaymentAccount = async (userId) => {
             { expiresIn: '5m' }
         );
 
+        // Create an HTTPS agent that accepts self-signed certificates
+        const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+
         // Create account in payment server
         await axios.post(
             `${process.env.PAYMENT_SERVER_URL}/api/accounts/add`,
@@ -18,7 +22,8 @@ const createPaymentAccount = async (userId) => {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                httpsAgent
             }
         );
         

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
+const https = require('https');
 
 const processPayment = async (req, res) => {
     try {
@@ -14,6 +15,9 @@ const processPayment = async (req, res) => {
             { expiresIn: '5m' }
         );
 
+        // Create an HTTPS agent that accepts self-signed certificates
+        const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+
         // First, create account if not exists
         try {
             console.log('Creating account with userId:', fromAccountId);
@@ -24,7 +28,8 @@ const processPayment = async (req, res) => {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    httpsAgent
                 }
             );
             console.log('Account creation response:', createAccountResponse.data);
@@ -45,7 +50,8 @@ const processPayment = async (req, res) => {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                httpsAgent
             }
         );
 
