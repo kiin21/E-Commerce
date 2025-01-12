@@ -185,9 +185,220 @@ const addProductToStore = async (req, res) => {
     }
 };
 
+const getProductById = async (req, res) => {
+    const id = req.params.productId;
+
+    if (!id) {
+        return res.status(400).json({ message: 'Cần Product ID' });
+    }
+
+    try {
+        const product = await Product.findByPk(id, {
+            attributes: [
+                'name',
+                'category_id',
+                'category_name',
+                'images', 
+                'discount_rate',
+                'original_price',
+                'short_description',
+                'description',
+                'quantity_sold',
+                'specifications',
+                'rating_average',
+                'price',
+                'inventory_status',
+                'qty',
+            ]
+        });
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Xử lý dữ liệu hình ảnh
+        const images = Array.isArray(product.images)
+            ? product.images
+            : JSON.parse(product.images || '[]');
+        const thumbnails = images.map(image => image.thumbnail_url);
+
+        const productDetail = {
+            name: product.name,
+            category_id: product.category_id,
+            category_name: product.category_name,
+            thumbnails, 
+            discount_rate: product.discount_rate,
+            original_price: product.original_price,
+            short_description: product.short_description,
+            description: product.description,
+            quantity_sold: product.quantity_sold,
+            specifications: product.specifications, 
+            rating_average: product.rating_average,
+            price: product.price,
+            inventory_status: product.inventory_status,
+            qty: product.qty,
+        };
+
+        res.status(200).json({ data: productDetail });
+    } catch (error) {
+        console.error('Error fetching product by ID:', error);
+        res.status(500).json({ message: 'Lỗi server', error: error.message });
+    }
+};
+
+const updateProduct = async (req, res) => {
+    const productId = req.params.productId;
+    const updateData = req.body;
+
+    try {
+        const product = await Product.findByPk(productId);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        const updatedProduct = await product.update(updateData);
+
+        res.status(200).json({
+            message: 'Cập nhật sản phẩm thành công',
+            product: updatedProduct,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Lỗi khi cập nhật sản phẩm',
+            error: error.message,
+        });
+    }
+};
+
+// Get top 10 selling products
+// GET /api/seller/products/:storeId/top-selling/
+const getTopSellingProducts_v1 = async (req, res) => {
+    try {
+        const storeId = req.params.storeId;
+
+        const products = await Product.findAll({
+            where: { 'current_seller.store_id': storeId },
+            order: [['quantity_sold', 'DESC']],
+            limit: 10,
+            attributes: [
+                'id',
+                'name',
+                'images',
+                'category_name',
+                'price',
+                'rating_average',
+                'quantity_sold',
+                'inventory_status'
+            ]
+        });
+
+        const formattedProducts = products.map(product => {
+            const images = Array.isArray(product.images)
+                ? product.images
+                : JSON.parse(product.images || '[]');
+            const thumbnails = images.map(image => image.thumbnail_url);
+            return {
+                id: product.id,
+                name: product.name,
+                category: product.category_name,
+                price: product.price,
+                rating: product.rating_average,
+                quantity_sold: product.quantity_sold,
+                thumbnails
+            };
+        });
+
+        res.status(200).json({ data: formattedProducts });
+    } catch (error) {
+        console.error('Error fetching top 10 best-selling products:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+// Get top selling products of a store
+// GET /api/seller/product/top-selling/limit=55&page=1
+let getTopSellingProducts_v2 = async (req, res) => {
+    try {
+        const id = req.user.id;
+
+        const seller = await Seller.findOne({
+            where: {
+                user_id: id
+            }
+        });
+
+        const storeId = seller.store_id;
+
+        if (!storeId) {
+            return res.status(400).json({ message: "Missing storeId parameter" });
+        }
+
+        const limit = parseInt(req.query.limit) || 20;  // Number of products per page 
+        const page = parseInt(req.query.page) || 1;    // Default to page 1
+        const offset = (page - 1) * limit;            // Calculate offset for pagination
+
+        // Correct way to cast the JSON store_id to integer and compare
+        const topSellingProducts = await Product.findAll({
+            attributes: [
+                'id',
+                'name',
+                'price',
+                'rating_average',
+                'quantity_sold',
+                'images',
+                [Sequelize.literal('price * quantity_sold'), 'earnings']
+            ],
+            where: Sequelize.where(
+                Sequelize.cast(Sequelize.json('current_seller.store_id'), 'INTEGER'),
+                storeId
+            ),
+            order: [['quantity_sold', 'DESC']],
+            limit,
+            offset
+        });
+
+        const totalItems = await Product.count({
+            where: {
+                'current_seller.store_id': storeId
+            }
+        });
+
+        const formattedProducts = topSellingProducts.map(product => {
+            const images = Array.isArray(product.images)
+                ? product.images
+                : JSON.parse(product.images || '[]');
+            const thumbnails = images.map(image => image.thumbnail_url);
+            return {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                rating: product.rating_average,
+                quantity_sold: product.quantity_sold,
+                thumbnails,
+                earnings: product.dataValues.earnings
+            };
+        });
+
+        res.status(200).json({
+            message: "Top selling products fetched successfully",
+            currentPage: page,
+            pageSize: limit,
+            totalItems: totalItems,
+            products: formattedProducts
+        });
+    } catch (error) {
+        console.error('Error fetching top selling products:', error);
+        res.status(500).json({ message: "Error fetching top selling products" });
+    }
+};
+
 module.exports = {
     getAllProductsByStoreId,
     deleteProduct,
     deleteMultipleProducts,
-    addProductToStore
+    addProductToStore,
+    getProductById,
+    updateProduct,
+    getTopSellingProducts_v1,
+    getTopSellingProducts_v2,
 };
