@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const Sequelize = require('sequelize');
 const { generateOTP, verifyOTP } = require('../../../utils/otpService');
 const { sendOTPVerificationEmail } = require('../../../services/mailer.service');
+const { createPaymentAccount } = require('../../../services/payment.service');
 
 const handleRegister = async (req, res) => {
     const { username, email, password } = req.body;
@@ -91,6 +92,9 @@ const verifyRegistrationOTP = async(req, res) => {
             role: 'User',
             is_active: true,
         });
+
+        // also, create new account in payment server
+        await createPaymentAccount(newUser.id);
 
         await newUser.save();
         await TempUser.destroy({ where: { email: email } });
