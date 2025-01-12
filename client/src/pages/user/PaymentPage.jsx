@@ -144,7 +144,9 @@ const PaymentPage = () => {
       const success = await performSubsystemPayment(
           axiosPrivate,
           orderDetails.total,
-          response.id
+          response.id,
+          response.username,
+          orderId
       );
       
       if (success) {

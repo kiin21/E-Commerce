@@ -3,7 +3,7 @@ const Transaction = require('../models/Transaction');
 const sequelize = require('../config/db');
 
 const performPayment = async (req, res) => {
-    const { fromAccountId, toAccountId, amount } = req.body;
+    const { fromAccountId, toAccountId, amount, buyer, order_id } = req.body;
 
     try {
         const fromAccount = await Account.findByPk(fromAccountId);
@@ -31,7 +31,9 @@ const performPayment = async (req, res) => {
             await Transaction.create({
                 from_account_id: fromAccountId,
                 to_account_id: toAccountId,
-                amount: paymentAmount
+                amount: paymentAmount,
+                buyer: buyer,
+                order_id: order_id
             }, { transaction: t });
         });
 

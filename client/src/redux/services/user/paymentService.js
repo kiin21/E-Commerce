@@ -64,13 +64,15 @@ const handlePaymentReturn = async (axiosPrivate, queryParams) => {
     }
 };
 
-const performSubsystemPayment = async (axiosPrivate, amount, userId) => {
+const performSubsystemPayment = async (axiosPrivate, amount, userId, buyer, order_id) => {
     try {
         // Call main server's payment endpoint instead of payment server directly
         const response = await axiosPrivate.post(`/api/payment/subsystem/process`, {
             fromAccountId: userId,
             toAccountId: 1,
             amount: amount,
+            buyer: buyer,
+            order_id: order_id
         });
 
         if (!response.data.success) {

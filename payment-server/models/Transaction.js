@@ -29,6 +29,14 @@ const Transaction = sequelize.define('Transaction', {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
     },
+    buyer: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    order_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
     timestamp: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

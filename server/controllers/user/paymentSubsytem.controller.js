@@ -4,9 +4,9 @@ const https = require('https');
 
 const processPayment = async (req, res) => {
     try {
-        const { fromAccountId, toAccountId, amount } = req.body;
+        const { fromAccountId, toAccountId, amount, buyer, order_id } = req.body;
         
-        console.log('Payment Request Data:', { fromAccountId, toAccountId, amount });
+        console.log('Payment Request Data:', { fromAccountId, toAccountId, amount, buyer, order_id });
         
         // Generate JWT token for payment server
         const token = jwt.sign(
@@ -38,13 +38,15 @@ const processPayment = async (req, res) => {
         }
 
         // Then perform payment
-        console.log('Performing payment with data:', { fromAccountId, toAccountId, amount });
+        console.log('Performing payment with data:', { fromAccountId, toAccountId, amount, buyer, order_id });
         const response = await axios.post(
             `${process.env.PAYMENT_SERVER_URL}/api/payments/perform`,
             { 
                 fromAccountId,
                 toAccountId, 
-                amount 
+                amount,
+                buyer,
+                order_id
             },
             {
                 headers: {
