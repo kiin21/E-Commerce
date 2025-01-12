@@ -4,7 +4,7 @@ import Login from "./pages/user/LoginPage.jsx";
 import Home from "./pages/user/HomePage.jsx";
 import UserLayout from "./layouts/UserLayout.jsx";
 import AuthLayout from "./layouts/AuthLayout";
-import AdminLayout from "./layouts/AdminLayout.jsx";
+import AdminLayout from "./layouts/AdminLayout";
 import SellerLayout from "./layouts/SellerLayout.jsx";
 import MissingPage from "./pages/MissingPage.jsx";
 import RequireAuth from "./hooks/RequireAuth";
@@ -16,6 +16,8 @@ import GoogleAuthHandler from './pages/user/GoogleAuthHandlerPage.jsx';
 import Search from "./pages/user/SearchPage.jsx";
 import CategoryWithProducts from "./components/user/CategoryWithProducts.jsx";
 import ProductDetails from "./components/user/ProductDetails.jsx";
+import TopDealsPage from "./pages/user/TopDealsPage.jsx";
+import FlashSalePage from "./pages/user/FlashSalePage.jsx";
 
 // Admin page components
 import AdminDashboard from "./pages/admin/DashboardPage.jsx";
@@ -25,25 +27,26 @@ import UserWithOrderPage from "./pages/admin/UserWithOrderPage.jsx";
 import SellerManagement from "./pages/admin/SellerManagementPage.jsx";
 import SellerDetailPage from "./pages/admin/SellerDetailPage.jsx";
 import SellerProductPage from "./pages/admin/SellerWithProductPage.jsx";
+import Cart from "./pages/user/CartPage.jsx";
+import PaymentPage from "./pages/user/PaymentPage.jsx";
+import PaymentSuccess from "./components/user/PaymentSuccess.jsx";
+import PaymentFailure from "./components/user/PaymentFailure.jsx";
 import SellerAnalyticsPage from "./pages/admin/SellerAnalyticsPage.jsx";
 import SellerEditPage from "./pages/admin/SellerEditPage.jsx";
 import ProductManagement from "./pages/admin/ProductManagementPage.jsx";
 import ProductDetailPage from "./pages/admin/ProductManagementDetailPage.jsx";
-import Cart from "./pages/user/CartPage.jsx";
-// import PaymentPage from "./pages/user/PaymentPage.jsx";
-// import PaymentSuccess from "./components/user/PaymentSuccess.jsx";
-// import PaymentFailure from "./components/user/PaymentFailure.jsx";
 
 
 // Seller page components
 import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
 import SellerProductManagement from "./pages/seller/SellerProductManagement.jsx";
-import SellerAddProduct from "./pages/seller/SellerAddProduct.jsx";
 import SellerProductDetail from "./pages/seller/SellerProductDetail.jsx";
+import SellerAddProduct from "./pages/seller/SellerAddProduct.jsx";
+import SellerVoucher from "./pages/seller/SellerVoucher.jsx";
 import SellerEditProduct from "./pages/seller/SellerEditProduct.jsx";
 import SellerInfo from "./pages/seller/SellerInfo.jsx";
-import SellerVoucher from "./pages/seller/SellerVoucher.jsx";
 import SellerOrder from "./pages/seller/SellerOrder.jsx";
+import StoreDetail from "./pages/user/StoreDetail.jsx";
 
 const ROLES = {
     User: 'User',
@@ -58,12 +61,23 @@ const App = () => {
                 {/* USER ROUTE */}
                 <Route path="/" element={<UserLayout />}>
                     <Route index element={<Home />} />
-
+                    <Route path="/top-deals" element={<TopDealsPage />} />
+                    <Route path="/flash-sale" element={<FlashSalePage />} />
+                    <Route path="/search/:keyword" element={<Search />} />
+                    <Route path="category/:url_key/:id" element={<CategoryWithProducts />} />
+                    <Route path="product/:url_key" element={<ProductDetails />} />
+                    <Route path="store/:storeId" element={<StoreDetail />} />
                 </Route>
 
                 {/* USER ROUTE RequireAuth */}
                 <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Admin]} />}>
-
+                    <Route path="/" element={<UserLayout />}>
+                        <Route path="/checkout" element={<Navigate to="/checkout/cart" />} />
+                        <Route path="/checkout/cart" element={<Cart />} />
+                        <Route path="/checkout/payment" element={<PaymentPage />} />
+                    </Route>
+                    <Route path="/checkout/success" element={<PaymentSuccess />} />
+                    <Route path="/checkout/failure" element={<PaymentFailure />} />
                 </Route>
 
                 {/* ADMIN ROUTES */}
