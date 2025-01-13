@@ -1,18 +1,17 @@
-// services/productApi.js
-export const getStore = async (axiosPrivate) => {
+import axios from '../config/axios';
+
+const fetchStoreDetails = async (storeId, page = 1, limit = 24, query = '', sort = 'popular') => {
     try {
-        const response = await axiosPrivate.get(`/api/seller/store`);
+        const response = await axios.get(`/api/store/${storeId}`, {
+            params: { page, limit, query, sort },
+        });
         return response.data;
     } catch (error) {
-        throw new Error(error.response?.data?.message || 'Failed to fetch seller info');
+        console.error('Error fetching store details:', error);
+        throw error;
     }
 };
 
-export const updateStore = async (axiosPrivate, store) => {
-    try {
-        const response = await axiosPrivate.patch(`/api/seller/store/update`, store);
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response?.data?.message || 'Failed to update seller info');
-    }
-}
+
+
+export { fetchStoreDetails };

@@ -99,7 +99,6 @@ export const refreshToken = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {          
             const response = await authServices.refreshToken();
-            
             const accessToken = response?.accessToken;
             if (accessToken) {
                 const decodedToken = jwtDecode(accessToken);
