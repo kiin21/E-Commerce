@@ -88,8 +88,7 @@ const suspendCategory = async (req, res) => {
             });
         }
 
-        category.is_active = false;
-        await category.save();
+        await category.destroy();
 
         return res.status(200).json({
             message: 'Category suspended successfully',
@@ -170,6 +169,8 @@ const addCategory = async (req, res) => {
         // Create a new category with the provided data
         const cateId = await Category.max('id');
         newCategory.id = cateId + 1;
+        newCategory.parent_id = newCategory.parent_id != null ? newCategory.parent_id : 0;
+        newCategory.url_path = newCategory.url_path + `/c${newCategory.id}`;
         const category = await Category.create(newCategory);
         console.log('New Category:', category);
         // Return the newly created category data

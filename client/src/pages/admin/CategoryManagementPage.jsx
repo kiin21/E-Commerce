@@ -133,7 +133,6 @@ const CategoryManagementPage = () => {
             render: (_, record) => (
                 <div>
                     <Text strong className="block">{record.name}</Text>
-                    <Text type="secondary" className="text-xs">SKU: {record.current_seller?.sku}</Text>
                 </div>
             ),
         },

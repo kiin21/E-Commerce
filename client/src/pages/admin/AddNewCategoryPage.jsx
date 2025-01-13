@@ -77,9 +77,9 @@ const AddCategoryForm = ({ onSuccess, onCancel }) => {
                 autoComplete="off"
             >
                 <Form.Item
-                    label="Category Name"
+                    label="Tên danh mục"
                     name="name"
-                    rules={[{ required: true, message: 'Please enter category name' }]}
+                    rules={[{ required: true, message: 'Vui lòng nhập tên danh mục' }]}
                 >
                     <Input
                         placeholder="Enter category name"
@@ -93,6 +93,7 @@ const AddCategoryForm = ({ onSuccess, onCancel }) => {
                 <Form.Item
                     label="Thumbnail"
                     name="thumbnail_url"
+                    rules={[{ required: true, message: 'Vui lòng upload ảnh' }]}
                 >
                     <div>
                         <Upload
@@ -124,7 +125,7 @@ const AddCategoryForm = ({ onSuccess, onCancel }) => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Parent Category"
+                    label="Danh mục cha (bỏ qua nếu là danh mục gốc)"
                     name="parent_id"
                 >
                     <Select
@@ -138,14 +139,6 @@ const AddCategoryForm = ({ onSuccess, onCancel }) => {
                             <Option key={category.id} value={category.id}>{category.name}</Option>
                         ))}
                     </Select>
-                </Form.Item>
-
-                <Form.Item
-                    label="URL Path"
-                    name="url_path"
-                    rules={[{ required: true, message: 'Please enter URL path' }]}
-                >
-                    <Input placeholder="Enter URL path (auto-generated from name if empty)" />
                 </Form.Item>
 
                 <Form.Item
