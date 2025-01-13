@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { initializeApp } = require('firebase/app');
 const { getDatabase } = require('firebase/database');
 
