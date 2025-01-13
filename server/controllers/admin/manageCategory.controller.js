@@ -13,9 +13,10 @@ const getAllCategories = async (req, res) => {
         const whereCondition = search ? {
             [Op.or]: [
                 { name: { [Op.iLike]: `%${search}%` } },
-                { url_path: { [Op.iLike]: `%${search}%` } }
-            ]
-        } : {};
+                { url_path: { [Op.iLike]: `%${search}%` } },
+            ],
+            is_active: true
+        } : { is_active: true };
 
         // Get total count for pagination
         const totalCount = await Category.count({
@@ -134,13 +135,13 @@ const restoreCategory = async (req, res) => {
 // [PUT] /api/admin/category/:id
 const updateCategory = async (req, res) => {
     const { id } = req.params; // Get category ID from URL parameters
-    const queryData = req.query; // Get category data from query parameters
+    const updateData = req.body; // Get category data from request body
 
-    console.log('Updated Category Data:', queryData);
+    console.log('Updated Category Data:', updateData);
 
     try {
         // Update only the provided fields for the category
-        const [updatedRowsCount] = await Category.update(queryData, {
+        const [updatedRowsCount] = await Category.update(updateData, {
             where: { id }, // Find the category by ID
         });
 
@@ -149,7 +150,7 @@ const updateCategory = async (req, res) => {
             const updatedCategory = await Category.findByPk(id); // Fetch the updated category from the DB
             res.status(200).json({
                 message: 'Category updated successfully',
-                updatedCategory, // Return the full updated category data
+                data: updatedCategory, // Return the full updated category data
             });
         } else {
             // If no rows were affected, return a "Category not found" response
@@ -161,7 +162,26 @@ const updateCategory = async (req, res) => {
     }
 };
 
+// [POST] /api/admin/category/add
+const addCategory = async (req, res) => {
+    const newCategory = req.body; // Get new category data from request body
 
+    try {
+        // Create a new category with the provided data
+        const cateId = await Category.max('id');
+        newCategory.id = cateId + 1;
+        const category = await Category.create(newCategory);
+        console.log('New Category:', category);
+        // Return the newly created category data
+        res.status(201).json({
+            message: 'Category added successfully',
+            data: category,
+        });
+    } catch (error) {
+        console.error('Error adding category:', error);
+        res.status(500).json({ message: 'Failed to add category', error: error.message });
+    }
+};
 
 module.exports = {
     getAllCategories,
@@ -169,4 +189,5 @@ module.exports = {
     suspendCategory,
     restoreCategory,
     updateCategory,
+    addCategory,
 };

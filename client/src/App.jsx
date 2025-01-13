@@ -37,7 +37,7 @@ import ProductManagement from "./pages/admin/ProductManagementPage.jsx";
 import ProductDetailPage from "./pages/admin/ProductManagementDetailPage.jsx";
 import CategoryManagement from "./pages/admin/CategoryManagementPage.jsx";
 import CategoryDetailPage from "./pages/admin/CategoryDetailPage.jsx";
-
+import AddNewCategorylPage from "./pages/admin/AddNewCategoryPage.jsx";
 
 // Seller page components
 import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
@@ -112,6 +112,7 @@ const App = () => {
                         <Route path="category-management" >
                             <Route index element={<CategoryManagement />} />
                             <Route path=":id" element={<CategoryDetailPage />} />
+                            <Route path="add" element={<AddNewCategorylPage />} />
                         </Route>
                     </Route>
                 </Route>

@@ -5,12 +5,11 @@ import { fetchAllCategories, deleteCategory, restoreCategory } from '../../redux
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { useDispatch } from 'react-redux';
 import {
+    PlusOutlined,
     SearchOutlined,
-    EyeOutlined,
     EditOutlined,
     DeleteOutlined,
     RedoOutlined,
-    ArrowLeftOutlined, UndoOutlined, CheckOutlined, StopOutlined
 } from '@ant-design/icons';
 
 const { Text } = Typography;
@@ -77,20 +76,24 @@ const CategoryManagementPage = () => {
         fetchProducts(1, pagination.pageSize, '');
     };
 
+    const handleAddNew = () => {
+        navigate('/admin/category-management/add');
+    };
+
     const handleDelete = (record) => {
         Modal.confirm({
-            title: 'Are you sure you want to delete this product?',
-            content: `Product Name: ${record.name}`,
+            title: 'Bạn có chắc chắn rằng muốn xoá danh mục này?',
+            content: `Tên danh mục: ${record.name}`,
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',
             onOk: async () => {
                 try {
                     await dispatch(deleteCategory({ id: record.id, axiosInstance: axiosPrivate }));
-                    message.success('Product deleted successfully');
+                    message.success('Category deleted successfully');
                     fetchProducts(pagination.current, pagination.pageSize, searchText);
                 } catch (error) {
-                    message.error('Failed to delete product: ' + error.message);
+                    message.error('Failed to delete category: ' + error.message);
                 }
             },
         });
@@ -141,7 +144,7 @@ const CategoryManagementPage = () => {
             fixed: 'right',
             render: (_, record) => (
                 <Space size="middle">
-                    <Tooltip title="Edit">
+                    <Tooltip title="Sửa">
                         <Button
                             type="link"
                             icon={<EditOutlined />}
@@ -149,14 +152,14 @@ const CategoryManagementPage = () => {
                             className="text-yellow-600 p-0 hover:text-gray-800"
                         />
                     </Tooltip>
-                    <Tooltip title={record.inventory_status == 'available' ? 'suspend' : 'available'}>
+                    <Tooltip title='Xoá'>
                         <Button
                             type="link"
-                            icon={record.inventory_status == 'available' ? <DeleteOutlined /> : <RedoOutlined />}
+                            icon={<DeleteOutlined />}
                             onClick={() => {
-                                record.inventory_status == 'available' ? handleDelete(record) : handleRestored(record)
+                                handleDelete(record);
                             }}
-                            className={record.inventory_status == 'available' ? 'text-red-600 hover:text-red-800' : 'text-green-600 hover:text-green-800'}
+                            className='text-red-600 hover:text-red-800'
                         />
                     </Tooltip>
                 </Space>
@@ -176,12 +179,21 @@ const CategoryManagementPage = () => {
                         onPressEnter={handleSearch}
                         className="w-64"
                     />
-                    <Button
-                        onClick={handleRefresh}
-                        icon={<RedoOutlined />}
-                    >
-                        Tải lại
-                    </Button>
+                    <div className="flex gap-2">
+                        <Button
+                            onClick={handleAddNew}
+                            icon={<PlusOutlined />}
+                            type="primary"
+                        >
+                            Thêm danh mục mới
+                        </Button>
+                        <Button
+                            onClick={handleRefresh}
+                            icon={<RedoOutlined />}
+                        >
+                            Refresh
+                        </Button>
+                    </div>
                 </div>
 
                 <Table

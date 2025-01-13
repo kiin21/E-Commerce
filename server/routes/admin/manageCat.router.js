@@ -16,4 +16,8 @@ router.put('/:id/suspend', catController.suspendCategory);
 
 // [PUT] /api/admin/category/:id/restore
 router.put('/:id/restore', catController.restoreCategory);
+
+// [POST] /api/admin/category/add
+router.post('/add', catController.addCategory);
+
 module.exports = router;

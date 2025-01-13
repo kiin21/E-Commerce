@@ -50,7 +50,6 @@ const CategoryEditPage = () => {
             loadCategory();
         }
     }, [dispatch, axiosPrivate, id, form]);
-
     const handleImageUpload = async (file) => {
         try {
             setUploadLoading(true);
@@ -70,6 +69,7 @@ const CategoryEditPage = () => {
         setSubmitLoading(true);
         try {
             const params = { ...values, id };
+            console.log('Form values:', params);
             await updateCategory({ axiosPrivate, categoryId: id, formData: params });
             message.success('Category updated successfully');
             navigate('/admin/category-management');
@@ -160,30 +160,6 @@ const CategoryEditPage = () => {
                                 value={imageUrl}
                             />
                         </div>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Parent Category ID"
-                        name="parent_id"
-                        rules={[{ type: 'number', transform: (value) => Number(value) }]}
-                    >
-                        <Input type="number" placeholder="Enter parent category ID" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="URL Path"
-                        name="url_path"
-                        rules={[{ required: true, message: 'Please enter URL path' }]}
-                    >
-                        <Input placeholder="Enter URL path" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Is Leaf Category"
-                        name="is_leaf"
-                        valuePropName="checked"
-                    >
-                        <Switch />
                     </Form.Item>
 
                     <Form.Item>
