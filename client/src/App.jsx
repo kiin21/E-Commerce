@@ -35,6 +35,8 @@ import SellerAnalyticsPage from "./pages/admin/SellerAnalyticsPage.jsx";
 import SellerEditPage from "./pages/admin/SellerEditPage.jsx";
 import ProductManagement from "./pages/admin/ProductManagementPage.jsx";
 import ProductDetailPage from "./pages/admin/ProductManagementDetailPage.jsx";
+import CategoryManagement from "./pages/admin/CategoryManagementPage.jsx";
+import CategoryDetailPage from "./pages/admin/CategoryDetailPage.jsx";
 
 
 // Seller page components
@@ -105,6 +107,11 @@ const App = () => {
                         <Route path="product-management" >
                             <Route index element={<ProductManagement />} />
                             <Route path=":id" element={<ProductDetailPage />} />
+                        </Route>
+                        {/* Category Management */}
+                        <Route path="category-management" >
+                            <Route index element={<CategoryManagement />} />
+                            <Route path=":id" element={<CategoryDetailPage />} />
                         </Route>
                     </Route>
                 </Route>

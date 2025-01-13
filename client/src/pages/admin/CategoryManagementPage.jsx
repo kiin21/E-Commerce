@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Space, Button, Input, Card, Typography, Tooltip, message, Tag, Modal } from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchAllProducts, deleteProduct, restoreProduct } from '../../redux/actions/admin/productManagementAction';
+import { fetchAllCategories, deleteCategory, restoreCategory } from '../../redux/actions/admin/categoryManagementAction';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { useDispatch } from 'react-redux';
 import {
@@ -15,12 +15,12 @@ import {
 
 const { Text } = Typography;
 
-const ProductManagement = () => {
+const CategoryManagementPage = () => {
     const navigate = useNavigate();
     const axiosPrivate = useAxiosPrivate();
     const dispatch = useDispatch(); // Added missing dispatch
     const [searchText, setSearchText] = useState('');
-    const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
     const [pagination, setPagination] = useState({
         current: 1,
@@ -32,7 +32,7 @@ const ProductManagement = () => {
         setLoading(true);
         try {
             const resultAction = await dispatch(
-                fetchAllProducts({
+                fetchAllCategories({
                     axiosInstance: axiosPrivate,
                     page,
                     limit: pageSize,
@@ -40,15 +40,16 @@ const ProductManagement = () => {
                 })
             );
 
-            if (fetchAllProducts.fulfilled.match(resultAction)) {
-                const { products, totalCount, currentPage, pageSize, search } = resultAction.payload;
-                setProducts(products);
+            if (fetchAllCategories.fulfilled.match(resultAction)) {
+                const { category, totalCount, currentPage, pageSize, search } = resultAction.payload;
+                setCategories(category);
                 setPagination({
                     current: currentPage,
                     pageSize,
                     total: totalCount,
                     search: search,
                 });
+                console.log('Products:', resultAction);
             } else {
                 message.error(resultAction.error?.message || 'Failed to load products');
             }
@@ -85,7 +86,7 @@ const ProductManagement = () => {
             cancelText: 'No',
             onOk: async () => {
                 try {
-                    await dispatch(deleteProduct({ id: record.id, axiosInstance: axiosPrivate }));
+                    await dispatch(deleteCategory({ id: record.id, axiosInstance: axiosPrivate }));
                     message.success('Product deleted successfully');
                     fetchProducts(pagination.current, pagination.pageSize, searchText);
                 } catch (error) {
@@ -94,31 +95,9 @@ const ProductManagement = () => {
             },
         });
     };
-    const handleRestored = (record) => {
-        Modal.confirm({
-            title: 'Are you sure you want to restore this product?',
-            content: `Product Name: ${record.name}`,
-            okText: 'Yes',
-            okType: 'danger',
-            cancelText: 'No',
-            onOk: async () => {
-                try {
-                    if (record.qty) {
-                        await dispatch(restoreProduct({ id: record.id, axiosInstance: axiosPrivate }));
-                        message.success('Product restored successfully');
-                        fetchProducts(pagination.current, pagination.pageSize, searchText);
-                    } else {
-                        message.error('Product cannot be restored because it is out of stock');
-                    }
-                } catch (error) {
-                    message.error('Failed to unsuspend product: ' + error.message);
-                }
-            },
-        });
-    };
 
     const handleView = (record) => {
-        navigate(`/admin/product-management/${record.id}`);
+        navigate(`/admin/category-management/${record.id}`);
     }
 
     const columns = [
@@ -145,7 +124,7 @@ const ProductManagement = () => {
             ),
         },
         {
-            title: 'Tên SP',
+            title: 'Tên danh mục',
             key: 'name',
             width: '400px',
             render: (_, record) => (
@@ -156,82 +135,12 @@ const ProductManagement = () => {
             ),
         },
         {
-            title: 'Danh mục',
-            key: 'category_name',
-            width: '90px',
-            render: (_, record) => <Text>{record.category_name}</Text>,
-        },
-        {
-            title: 'Giá',
-            key: 'price',
-            width: '180px',
-            render: (_, record) => (
-                <div>
-                    <Text strong className="block">
-                        ₫{Number(record.price).toLocaleString()}
-                    </Text>
-                    {record.discount_rate > 0 && (
-                        <div className="flex items-center gap-2">
-                            <Text delete type="secondary" className="text-xs">
-                                ₫{Number(record.original_price).toLocaleString()}
-                            </Text>
-                            <Tag color="red">-{record.discount_rate}%</Tag>
-                        </div>
-                    )}
-                </div>
-            ),
-            sorter: (a, b) => (a.price || 0) - (b.price || 0),
-        },
-        {
-            title: 'SL Tồn',
-            key: 'qty',
-            width: '80px',
-            render: (_, record) => (
-                <div>
-                    <Text>{record.qty}</Text>
-                    <Tag
-                        color={record.inventory_status === 'available' ? 'green' : 'red'}
-                        className="ml-2"
-                    >
-                        {record.inventory_status}
-                    </Tag>
-                </div>
-            ),
-            sorter: (a, b) => (a.qty || 0) - (b.qty || 0),
-        },
-        {
-            title: 'SL Bán',
-            key: 'quantity_sold',
-            width: '50px',
-            render: (_, record) => <Text>{record.quantity_sold}</Text>,
-            sorter: (a, b) => (a.quantity_sold || 0) - (b.quantity_sold || 0),
-        },
-        {
-            title: 'Rating',
-            key: 'rating_average',
-            width: '70px',
-            render: (_, record) => (
-                <Text>
-                    {record.rating_average ? `${record.rating_average} ⭐` : 'No rating'}
-                </Text>
-            ),
-            sorter: (a, b) => (a.rating_average || 0) - (b.rating_average || 0),
-        },
-        {
             title: 'Hành động',
             key: 'actions',
             width: '80px',
             fixed: 'right',
             render: (_, record) => (
                 <Space size="middle">
-                    <Tooltip title="View Product">
-                        <Button
-                            type="link"
-                            icon={<EyeOutlined />}
-                            onClick={() => handleView(record)}
-                            className="text-blue-600 p-0 hover:text-gray-800"
-                        />
-                    </Tooltip>
                     <Tooltip title="Edit">
                         <Button
                             type="link"
@@ -257,7 +166,7 @@ const ProductManagement = () => {
 
     return (
         <div>
-            <Card title="Quản lý sản phẩm" className="shadow-md">
+            <Card title="Quản lý danh mục" className="shadow-md">
                 <div className="mb-4 flex justify-between items-center">
                     <Input
                         placeholder="Search products..."
@@ -277,14 +186,14 @@ const ProductManagement = () => {
 
                 <Table
                     columns={columns}
-                    dataSource={products}
+                    dataSource={categories}
                     rowKey="id"
                     loading={loading}
                     pagination={{
                         ...pagination,
                         showSizeChanger: true,
                         showQuickJumper: true,
-                        showTotal: (total) => `Total ${total} products`,
+                        showTotal: (total) => `Total ${total} categories`,
                         position: ['bottomCenter'],
                     }}
                     onChange={handleTableChange}
@@ -295,4 +204,4 @@ const ProductManagement = () => {
     );
 };
 
-export default ProductManagement;
+export default CategoryManagementPage;

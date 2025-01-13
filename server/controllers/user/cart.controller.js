@@ -7,6 +7,7 @@ const sequelize = require('../../config/db');
 const getCartItems = async (req, res) => {
     try {
         // check if cart does not exist for the user and create one
+        console.log('req.userrrrrrrrrrrrrrrrrrr: ', req.user);
         
         const cart = await Cart.findOne({
             where: {

@@ -37,7 +37,7 @@ function Header() {
         };
         // check if user is authenticated before fetching cart items
         if (isAuthenticated) {
-            // fetchCartItems();
+            fetchCartItems();
         }
     }, []);
 

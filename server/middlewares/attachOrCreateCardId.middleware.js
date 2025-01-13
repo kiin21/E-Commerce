@@ -17,7 +17,7 @@ const attachOrCreateCartId = async (req, res, next) => {
         } else {
             req.user.cart_id = cart.id;
         }
-
+        console.log("HEREEEEEEEEEEEEEEEEEE: ", req.user);
         next();
     } catch (error) {
         return res.status(500).json({
