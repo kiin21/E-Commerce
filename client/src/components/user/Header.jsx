@@ -18,14 +18,14 @@ function Header() {
     const navigate = useNavigate();
     const { user, isAuthenticated } = useSelector(selectAuth);
     const dispatch = useDispatch();
-    // const cartQuantity = useSelector(selectCartQuantity);
+    const cartQuantity = useSelector(selectCartQuantity);
     const axiosPrivate = useAxiosPrivate();
-
+    
     useEffect(() => {
         // Update cart quantity in the header initially and whenever the cart changes
         const fetchCartItems = async () => {
             const response = await getCartItems(axiosPrivate);
-
+            
             if (!response.success) {
                 return;
             }
@@ -36,8 +36,10 @@ function Header() {
             dispatch(setCartQuantity(quantity));
         };
         // check if user is authenticated before fetching cart items
-        if (isAuthenticated) {
-            // fetchCartItems();
+        if (isAuthenticated && user.role.toLowerCase() === 'user') {
+            debugger;
+            fetchCartItems();
+        //    console.log('User: ', user);
         }
     }, []);
 
@@ -63,11 +65,18 @@ function Header() {
         navigate('/checkout/cart');
     }
 
-    const handleLogout = async () => {
+    const handleLogout = async() => {
         await dispatch(logout({ axiosPrivate }));
-        debugger;
         // Redirect to login after logout
         navigate('/auth/login');
+    }
+
+    const handleAccountInfoClick = () => {
+        navigate('/account/info');
+    }
+
+    const handleOrderManagementClick = () => {
+        navigate('/order-management');
     }
 
     return (
@@ -78,7 +87,7 @@ function Header() {
                     <p className="text-gray-600 hover:text-gray-800 mr-10">
                         <Link to="/auth/login?type=seller">Kênh bán hàng</Link>
                     </p>
-
+                           
 
                     {/* Wrapper for logo and text */}
                     <div className="flex flex-col items-center sm:items-start">
@@ -97,19 +106,19 @@ function Header() {
                     <Search />
 
                     {/* Conditional Rendering for User Login */}
-                    {isAuthenticated ? (
+                    {(isAuthenticated && user.role.toLowerCase() === 'user')? (
                         <div className="flex items-center space-x-6 mt-4 sm:mt-0">
                             <div className="relative">
                                 <button
-                                    className="flex items-center text-gray-600 hover:text-gray-800"
-                                    onClick={handleCartClick}
-                                >
+                                className="flex items-center text-gray-600 hover:text-gray-800"
+                                onClick={handleCartClick}
+                            >
                                     <ShoppingCartOutlined style={{ fontSize: '20px', marginRight: '12px' }} />
                                     Giỏ hàng
                                 </button>
-                                {/* <span className="absolute -top-2 left-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                    {cartQuantity}
-                                </span> */}
+                                <span className="absolute -top-2 left-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                {cartQuantity}
+                                </span>
                             </div>
                             <div className="relative">
                                 <BellOutlined style={{ fontSize: '20px', marginRight: '6px' }} />
@@ -138,11 +147,13 @@ function Header() {
                                     >
                                         <button
                                             className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+                                            onClick={handleAccountInfoClick}
                                         >
                                             Thông tin tài khoản
                                         </button>
                                         <button
                                             className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+                                            onClick={handleOrderManagementClick}
                                         >
                                             Đơn hàng của tôi
                                         </button>
@@ -160,9 +171,9 @@ function Header() {
                         <div className="flex items-center space-x-6 mt-4 sm:mt-0">
                             <div className='relative'>
                                 <button
-                                    className="flex items-center text-gray-600 hover:text-gray-800 mr-12"
-                                    onClick={handleCartClick}
-                                >
+                                className="flex items-center text-gray-600 hover:text-gray-800 mr-12"
+                                onClick={handleCartClick}
+                            >
                                     <ShoppingCartOutlined style={{ fontSize: '20px', marginRight: '12px' }} />
                                     Giỏ hàng
                                 </button>
