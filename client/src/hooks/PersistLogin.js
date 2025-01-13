@@ -8,7 +8,7 @@ import { selectAuth } from "../redux/reducers/user/authReducer";
 const PersistLogin = () => {
     const [isLoading, setIsLoading] = useState(true);
     //    const { auth } = useAuth();
-    const {user} = useSelector(selectAuth);
+    const { user } = useSelector(selectAuth);
     const refreshToken = useRefreshToken();
 
     useEffect(() => {

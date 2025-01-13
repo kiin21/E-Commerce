@@ -139,6 +139,24 @@ const PaymentPage = () => {
     } else if (selectedPayment === 'paypal') {
       setOrderIdGlobal(orderId);
       setShowPayPal(true);
+    } else if (selectedPayment === 'subsystem') {
+      const response = await getUserByEmail(axiosPrivate, user.email);
+      const success = await performSubsystemPayment(
+          axiosPrivate,
+          orderDetails.total,
+          response.id,
+          response.username,
+          orderId
+      );
+      
+      if (success) {
+          await updateOrder(axiosPrivate, orderId, 'processing', shippingAddress);
+          const itemIds = cartItems.map((item) => item.product_id);
+          await deleteCartItem(axiosPrivate, { itemIds });
+          navigate('/checkout/success');
+      } else {
+          navigate('/checkout/failure');
+      }
     }
 
     // remove selected items from cart
@@ -258,6 +276,21 @@ const PaymentPage = () => {
                 <span>VNPAY</span>
                 <p className="text-sm text-gray-500">Quét Mã QR từ ứng dụng ngân hàng</p>
               </div>
+            </label>
+
+            <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+              <input
+                  type="radio"
+                  name="payment"
+                  value="subsystem"
+                  checked={selectedPayment === 'subsystem'}
+                  onChange={(e) => setSelectedPayment(e.target.value)}
+                  className="mr-3"
+              />
+              <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center mr-3">
+                  <CreditCard className="w-5 h-5 text-blue-600" />
+              </div>
+              <span>Thanh toán bằng hệ thống phụ</span>
             </label>
           </div>
         </div>

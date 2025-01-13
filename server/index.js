@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const app = express();
 const sequelize = require('./config/db');
 const cors = require('cors');
@@ -38,7 +40,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET,  // Change 'your-secret-key' to a secure, unique string
     resave: false,              // Prevent session from being saved back to the store if it wasn't modified
     saveUninitialized: false,   // Only save session data when something is stored in the session
-    cookie: { secure: false }   // Use secure: true if you're using HTTPS
+    cookie: { secure: true } // Use secure: true for HTTPS
 }));
 
 
@@ -67,7 +69,14 @@ sequelize.sync({ force: false })
         // Error handler middleware
         app.use(errorHandler);
 
-        app.listen(PORT, () => {
+        // Read SSL certificate and key
+        const sslOptions = {
+            key: fs.readFileSync(process.env.SSL_KEY_PATH),
+            cert: fs.readFileSync(process.env.SSL_CERT_PATH)
+        };
+
+        // Create HTTPS server
+        https.createServer(sslOptions, app).listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
     })

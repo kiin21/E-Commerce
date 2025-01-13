@@ -4,6 +4,7 @@ const User = require('../models/User');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const { createPaymentAccount } = require('./payment.service');
 
 // Google Strategy
 passport.use(new GoogleStrategy({
@@ -29,6 +30,8 @@ passport.use(new GoogleStrategy({
                     password: await bcrypt.hash(crypto.randomBytes(20).toString('hex'), 10)
                 });
 
+                // also, create new account in payment server
+                await createPaymentAccount(user.id);
             }
         }
 
