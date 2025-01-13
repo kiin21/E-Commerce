@@ -36,10 +36,8 @@ function Header() {
             dispatch(setCartQuantity(quantity));
         };
         // check if user is authenticated before fetching cart items
-        if (isAuthenticated && user.role.toLowerCase() === 'user') {
-            debugger;
+        if (isAuthenticated) {
             fetchCartItems();
-        //    console.log('User: ', user);
         }
     }, []);
 

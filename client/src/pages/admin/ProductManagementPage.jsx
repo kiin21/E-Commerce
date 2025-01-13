@@ -16,7 +16,6 @@ import {
 const { Text } = Typography;
 
 const ProductManagement = () => {
-    const { id } = useParams();
     const navigate = useNavigate();
     const axiosPrivate = useAxiosPrivate();
     const dispatch = useDispatch(); // Added missing dispatch
@@ -35,7 +34,6 @@ const ProductManagement = () => {
             const resultAction = await dispatch(
                 fetchAllProducts({
                     axiosInstance: axiosPrivate,
-                    id,
                     page,
                     limit: pageSize,
                     search,
@@ -63,7 +61,7 @@ const ProductManagement = () => {
 
     useEffect(() => {
         fetchProducts(pagination.current, pagination.pageSize, searchText);
-    }, [id]); // Added searchText to dependencies
+    }, [searchText]);
 
     const handleSearch = React.useCallback(() => {
         fetchProducts(1, pagination.pageSize, searchText);
