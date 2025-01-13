@@ -27,7 +27,7 @@ const Footer = () => {
         {/*Information */}
         <div className="text-xs text-gray-500 leading-relaxed text-center">
           <p className="mb-2">
-            © Group 07 - 3KaToẾch - Nhập môn công nghệ phần mềm
+            © Phát triển ứng dụng web
           </p>
         </div>
       </div>
