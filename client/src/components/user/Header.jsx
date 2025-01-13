@@ -21,25 +21,25 @@ function Header() {
     // const cartQuantity = useSelector(selectCartQuantity);
     const axiosPrivate = useAxiosPrivate();
 
-    // useEffect(() => {
-    //     // Update cart quantity in the header initially and whenever the cart changes
-    //     const fetchCartItems = async () => {
-    //         const response = await getCartItems(axiosPrivate);
+    useEffect(() => {
+        // Update cart quantity in the header initially and whenever the cart changes
+        const fetchCartItems = async () => {
+            const response = await getCartItems(axiosPrivate);
 
-    //         if (!response.success) {
-    //             return;
-    //         }
+            if (!response.success) {
+                return;
+            }
 
-    //         const quantity = response.cartItems.length;
-    //         debugger;
+            const quantity = response.cartItems.length;
+            debugger;
 
-    //         dispatch(setCartQuantity(quantity));
-    //     };
-    //     // check if user is authenticated before fetching cart items
-    //     if (isAuthenticated) {
-    //         fetchCartItems();
-    //     }
-    // }, []);
+            dispatch(setCartQuantity(quantity));
+        };
+        // check if user is authenticated before fetching cart items
+        if (isAuthenticated) {
+            // fetchCartItems();
+        }
+    }, []);
 
     const handleClickLogo = () => {
         dispatch(setSearchQuery(''));

@@ -35,8 +35,8 @@ const Cart = () => {
 
         // check if user is authenticated before fetching cart items
         if (isAuthenticated) {
-            fetchCartItems();
-            getCartSummaryInfo();
+            // fetchCartItems();
+            // getCartSummaryInfo();
         }
 
     }, [cartUpdated]);
