@@ -2,13 +2,13 @@ const { initializeApp } = require('firebase/app');
 const { getDatabase } = require('firebase/database');
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCW4OzuR_HWG28C5IwFjGbjj1MwBYprCjI",
-    authDomain: "my-firebase-e3f67.firebaseapp.com",
-    databaseURL: "https://my-firebase-e3f67-default-rtdb.asia-southeast1.firebasedatabase.app/",
-    projectId: "my-firebase-e3f67",
-    storageBucket: "my-firebase-e3f67.appspot.com",
-    messagingSenderId: "23221906205",
-    appId: "1:23221906205:web:e74bd13c02cd0b0ec9cff4"
+    apiKey: process.env.FIREBASE_apiKey,
+    authDomain: process.env.FIREBASE_authDomain,
+    databaseURL: process.env.FIREBASE_databaseURL,
+    projectId: process.env.FIREBASE_projectId,
+    storageBucket: process.env.FIREBASE_storageBucket,
+    messagingSenderId: process.env.FIREBASE_messagingSenderId,
+    appId: process.env.FIREBASE_appId
 };
 
 const app = initializeApp(firebaseConfig);
