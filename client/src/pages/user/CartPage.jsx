@@ -10,6 +10,7 @@ import { setCartQuantity } from "../../redux/reducers/user/cartReducer";
 import { selectAuth } from '../../redux/reducers/user/authReducer';
 
 
+
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const axiosPrivate = useAxiosPrivate();
@@ -21,25 +22,25 @@ const Cart = () => {
 
     useEffect(() => {
         if (!cartUpdated) return;
-
+        
         const fetchCartItems = async () => {
-            const response = await getCartItems(axiosPrivate);
-
-            if (!response.success) {
-                return;
-            }
-
-            setCartItems(response.cartItems);
-            setCartUpdated(false);
+        const response = await getCartItems(axiosPrivate);
+    
+          if (!response.success) {
+            return;
+          }
+    
+          setCartItems(response.cartItems);
+          setCartUpdated(false);
         };
-
+        //debugger;
         // check if user is authenticated before fetching cart items
-        if (isAuthenticated) {
-            // fetchCartItems();
-            // getCartSummaryInfo();
+        if (isAuthenticated && user.role.toLowerCase() === 'user') {  
+          fetchCartItems();
+          getCartSummaryInfo();
         }
-
-    }, [cartUpdated]);
+        
+      }, [cartUpdated]);
 
     // Group cart items by seller
     const groupedItems = cartItems.reduce((acc, item) => {

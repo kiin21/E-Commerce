@@ -32,7 +32,7 @@ const userRoutes = (app) => {
 
     app.use('/api/orders', require('./order.route'));
 
-    // app.use('/api/cart', require('./cart.route'));
+    app.use('/api/cart', require('./cart.route'));
    
 
     // User routes

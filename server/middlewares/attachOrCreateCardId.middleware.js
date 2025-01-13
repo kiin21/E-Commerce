@@ -18,7 +18,7 @@ const attachOrCreateCartId = async (req, res, next) => {
             req.user.cart_id = cart.id;
         }
 
-        next();
+        return next();
     } catch (error) {
         return res.status(500).json({
             success: false,
