@@ -22,6 +22,9 @@ export const Sidebar = () => {
                     <Link to="/admin/product-management" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
                         <span>Quản lý sản phẩm</span>
                     </Link>
+                    <Link to="/admin/category-management" className="flex items-center space-x-2 p-2 rounded hover:bg-blue-600">
+                        <span>Quản lý danh mục</span>
+                    </Link>
                 </div>
             </nav>
         </div>

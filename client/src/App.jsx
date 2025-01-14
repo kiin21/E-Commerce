@@ -19,6 +19,7 @@ import ProductDetails from "./components/user/ProductDetails.jsx";
 import TopDealsPage from "./pages/user/TopDealsPage.jsx";
 import FlashSalePage from "./pages/user/FlashSalePage.jsx";
 import OrderManagement from "./pages/user/OrderManagement.jsx";
+import AccountInfo from "./pages/user/AccountInfo.jsx";
 
 // Admin page components
 import AdminDashboard from "./pages/admin/DashboardPage.jsx";
@@ -36,7 +37,9 @@ import SellerAnalyticsPage from "./pages/admin/SellerAnalyticsPage.jsx";
 import SellerEditPage from "./pages/admin/SellerEditPage.jsx";
 import ProductManagement from "./pages/admin/ProductManagementPage.jsx";
 import ProductDetailPage from "./pages/admin/ProductManagementDetailPage.jsx";
-
+import CategoryManagement from "./pages/admin/CategoryManagementPage.jsx";
+import CategoryDetailPage from "./pages/admin/CategoryDetailPage.jsx";
+import AddNewCategorylPage from "./pages/admin/AddNewCategoryPage.jsx";
 
 // Seller page components
 import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
@@ -70,6 +73,7 @@ const App = () => {
                     <Route path="store/:storeId" element={<StoreDetail />} />
                     <Route path="/checkout" element={<Navigate to="/checkout/cart" />} />
                     <Route path="/checkout/cart" element={<Cart />} />
+                    <Route path="account/info" element={<AccountInfo />} />
                 </Route>
 
                 {/* USER ROUTE RequireAuth */}
@@ -107,6 +111,12 @@ const App = () => {
                         <Route path="product-management" >
                             <Route index element={<ProductManagement />} />
                             <Route path=":id" element={<ProductDetailPage />} />
+                        </Route>
+                        {/* Category Management */}
+                        <Route path="category-management" >
+                            <Route index element={<CategoryManagement />} />
+                            <Route path=":id" element={<CategoryDetailPage />} />
+                            <Route path="add" element={<AddNewCategorylPage />} />
                         </Route>
                     </Route>
                 </Route>

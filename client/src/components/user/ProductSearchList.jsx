@@ -10,48 +10,58 @@ function ProductSearchList() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Local state for search results, loading, error, and pagination
     const [results, setResults] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
-    const [status, setStatus] = useState('idle'); // 'idle', 'loading', 'succeeded', 'failed'
+    const [status, setStatus] = useState('idle');
     const [error, setError] = useState(null);
     const [sort, setSort] = useState('default');
     const [currentPage, setCurrentPage] = useState(1);
-    const [limit] = useState(20); // Number of items per page
+    const [limit] = useState(20);
+    const [ratingRange, setRatingRange] = useState('all');
 
-    // Sort options for the radio buttons
     const sortOptions = [
         { label: 'Liên quan', value: 'most_relevant' },
-        { label: 'Phổ biến', value: 'default' },
+        { label: 'Phổ biến', value: 'default' },
         { label: 'Mới Nhất', value: 'newest' },
         { label: 'Bán Chạy', value: 'top_seller' },
-        { label: 'Giá cao đến thấp', value: 'price,desc' },
-        { label: 'Giá thấp đến cao', value: 'price,asc' },
+        { label: 'Giá cao đến thấp', value: 'price,desc' },
+        { label: 'Giá thấp đến cao', value: 'price,asc' },
+    ];
+
+    const ratingOptions = [
+        { label: 'Tất cả', value: 'all' },
+        { label: '4 - 5 sao', value: '4-5' },
+        { label: '3 - 4 sao', value: '3-4' },
+        { label: '2 - 3 sao', value: '2-3' },
+        { label: '1 - 2 sao', value: '1-2' },
     ];
 
     useEffect(() => {
-        // Reset pagination when keyword changes
         setCurrentPage(1);
         setTotalPages(1);
+        setRatingRange('all');
     }, [keyword]);
 
-    // Fetch search results when the keyword, sort, or page changes
     useEffect(() => {
         const fetchResults = async () => {
             setStatus('loading');
             try {
+                const [minRating, maxRating] = ratingRange !== 'all'
+                    ? ratingRange.split('-').map(Number)
+                    : [0, 5];
+
                 const response = await getSearchResults({
                     keyword,
                     limit,
                     page: currentPage,
                     sort,
+                    minRating,
+                    maxRating,
                 });
 
-                // Assuming the response has the structure you mentioned
                 const { data, paging } = response;
-
-                setResults(data); // Set the fetched products
-                setTotalPages(paging.total_pages); // Set total number of pages
+                setResults(data);
+                setTotalPages(paging.total_pages);
                 setStatus('succeeded');
             } catch (err) {
                 setError(err?.response?.data?.message || 'An error occurred');
@@ -62,37 +72,57 @@ function ProductSearchList() {
         if (keyword) {
             fetchResults();
         }
-    }, [keyword, currentPage, sort, limit]);
+    }, [keyword, currentPage, sort, limit, ratingRange]);
 
-    // Handle sort change
     const handleSortChange = (e) => {
-        setSort(e.target.value); // Update the sort state
-        setCurrentPage(1); // Reset to first page when sorting changes
+        setSort(e.target.value);
+        setCurrentPage(1);
     };
 
-    // Handle pagination change
+    const handleRatingChange = (e) => {
+        setRatingRange(e.target.value);
+        setCurrentPage(1);
+    };
+
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
     const handleProductClick = (product) => {
         navigate(`/product/${product.url_key}`, { state: { product } });
+    };
 
+    const renderStarRange = (range) => {
+        if (range === 'all') return null;
+
+        const [min, max] = range.split('-');
+        return (
+            <span className="flex items-center">
+                {[...Array(5)].map((_, index) => (
+                    <StarFilled
+                        key={index}
+                        className={`text-sm ${index >= min - 1 && index < max
+                                ? 'text-yellow-400'
+                                : 'text-gray-300'
+                            }`}
+                    />
+                ))}
+            </span>
+        );
     };
 
     return (
         <div className="flex-1">
-            {/* Search Keyword */}
             <div className="mb-4">
                 <h2 className="text-lg font-semibold">
                     Kết quả tìm kiếm cho từ khóa: <span className="text-blue-500">{keyword}</span>
                 </h2>
             </div>
 
-            {/* Sort Bar */}
-            <div className="bg-white p-4 rounded-lg shadow-sm mb-4 flex items-center justify-between">
+            <div className="bg-white p-4 rounded-lg shadow-sm mb-4 space-y-4">
+                {/* Sort Section */}
                 <div className="flex items-center gap-4">
-                    <span>Sắp xếp theo</span>
+                    <span className="min-w-24">Sắp xếp theo</span>
                     <Radio.Group value={sort} onChange={handleSortChange} buttonStyle="solid">
                         {sortOptions.map(option => (
                             <Radio.Button key={option.value} value={option.value}>
@@ -101,15 +131,26 @@ function ProductSearchList() {
                         ))}
                     </Radio.Group>
                 </div>
+
+                {/* Rating Filter Section */}
+                <div className="flex items-center gap-4">
+                    <span className="min-w-24">Đánh giá</span>
+                    <Radio.Group value={ratingRange} onChange={handleRatingChange} buttonStyle="solid">
+                        {ratingOptions.map(option => (
+                            <Radio.Button key={option.value} value={option.value} className="flex items-center">
+                                {option.value === 'all' ? option.label : renderStarRange(option.value)}
+                            </Radio.Button>
+                        ))}
+                    </Radio.Group>
+                </div>
             </div>
 
-            {/* Pagination */}
             {status === 'succeeded' && totalPages > 0 && (
                 <div className="flex justify-end mt-4">
                     <Pagination
                         simple
                         current={currentPage}
-                        total={totalPages * limit} // total count = total pages * items per page
+                        total={totalPages * limit}
                         pageSize={limit}
                         onChange={handlePageChange}
                         showSizeChanger={false}
@@ -117,21 +158,18 @@ function ProductSearchList() {
                 </div>
             )}
 
-            {/* Display Loading Spinner */}
             {status === 'loading' && (
                 <div className="flex justify-center mt-6">
                     <Spin size="large" />
                 </div>
             )}
 
-            {/* Error Message */}
             {status === 'failed' && (
                 <div className="bg-red-100 text-red-600 p-4 rounded-lg mb-4">
                     {error}
                 </div>
             )}
 
-            {/* Product Grid */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {status === 'succeeded' && results.length === 0 && (
                     <div className="col-span-4 text-center text-gray-500">
@@ -161,15 +199,7 @@ function ProductSearchList() {
                 ))}
             </div>
 
-            {/* Pagination */}
             {status === 'succeeded' && totalPages > 0 && (
-                // <Pagination
-                //   simple
-                //   current={currentPage}
-                //   total={totalPages * limit} // total count = total pages * items per page
-                //   pageSize={limit}
-                //   onChange={handlePageChange}
-                // />
                 <div className="flex justify-center mt-4">
                     <Pagination
                         current={currentPage}
