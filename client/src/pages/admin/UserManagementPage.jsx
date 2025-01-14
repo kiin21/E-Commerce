@@ -101,7 +101,7 @@ const UserManagement = () => {
 
     const columns = [
         {
-            title: 'User Info',
+            title: 'Thông tin người dùng',
             key: 'userInfo',
             render: (_, record) => (
                 <Space direction="vertical" size={1}>
@@ -111,7 +111,7 @@ const UserManagement = () => {
             ),
         },
         {
-            title: 'Status',
+            title: 'Trạng thái',
             key: 'status',
             render: (_, record) => (
                 <Text type={record.is_active ? 'success' : 'danger'}>
@@ -120,7 +120,7 @@ const UserManagement = () => {
             ),
         },
         {
-            title: 'Join Date',
+            title: 'Ngày tham gia',
             key: 'joinDate',
             dataIndex: 'createdAt',
             render: (createdAt) => (
@@ -128,7 +128,7 @@ const UserManagement = () => {
             ),
         },
         {
-            title: 'Actions',
+            title: 'Hành động',
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">

@@ -85,6 +85,8 @@ const verifyRegistrationOTP = async(req, res) => {
             return res.status(404).json({ message: 'Error with registration please register again !!!' });
         }
 
+        console.log('temp: ', tempUser);
+
         const newUser = await User.create({
             username: tempUser.username,
             email: tempUser.email,

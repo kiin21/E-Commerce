@@ -103,7 +103,7 @@ const SellerManagement = () => {
 
     const columns = [
         {
-            title: 'No.',
+            title: 'STT',
             key: 'index',
             width: '60px',
             render: (_, __, index) => (
