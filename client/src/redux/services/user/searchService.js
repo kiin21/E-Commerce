@@ -21,6 +21,8 @@ export const getSearchResults = async (
         sort = 'default',
         rating,
         price,
+        min_price,
+        max_price
     }) => {
 
     if (!keyword) {
@@ -33,6 +35,14 @@ export const getSearchResults = async (
     params.append('limit', limit);
     params.append('page', page);
     params.append('sort', sort);
+
+    if (min_price) {
+        params.append('min_price', min_price);
+    }
+
+    if (max_price) {
+        params.append('max_price', max_price);
+    }
 
     if (rating) {
         params.append('rating', rating);
