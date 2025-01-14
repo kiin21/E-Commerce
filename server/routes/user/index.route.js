@@ -24,6 +24,9 @@ const userRoutes = (app) => {
 
     app.use('/api/cart', attachOrCreateCartId, require('./cart.route'));
     
+    // Routes for store
+    app.use('/api/store', require('./store.route'));
+
     // Middleware to verify JWT
     app.use(verifyJWT);
 
@@ -34,6 +37,10 @@ const userRoutes = (app) => {
 
     app.use('/api/orders', require('./order.route'));   
 
+    app.use('/api/cart', attachOrCreateCartId, require('./cart.route'));
+
+    // User routes
+    app.use('/api/users', require('./users.route'));
 }
 
 module.exports = userRoutes;
