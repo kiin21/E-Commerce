@@ -7,5 +7,6 @@ router.post('/items', cartController.addToCartItem);
 router.post('/items/remove', cartController.deleteCartItem);
 router.post('/items/:itemId([0-9]+)', cartController.updateCartItem);
 router.get('/items/summary', cartController.getCartSummary);
+router.post('/merge-session', cartController.mergeSessionCartToDatabase);
 
 module.exports = router;

@@ -31,16 +31,15 @@ function Header() {
             }
 
             const quantity = response.cartItems.length;
-            debugger;
+        
 
             dispatch(setCartQuantity(quantity));
         };
         // check if user is authenticated before fetching cart items
-        if (isAuthenticated && user.role.toLowerCase() === 'user') {
-            debugger;
+    //    if (isAuthenticated && user.role.toLowerCase() === 'user') {
             fetchCartItems();
         //    console.log('User: ', user);
-        }
+    //    }
     }, []);
 
     const handleClickLogo = () => {
@@ -59,9 +58,9 @@ function Header() {
 
     const handleCartClick = () => {
         // check if user is authenticated
-        if (!isAuthenticated) {
-            return navigate('/auth/login');
-        }
+        // if (!isAuthenticated) {
+        //     return navigate('/auth/login');
+        // }
         navigate('/checkout/cart');
     }
 
@@ -117,7 +116,7 @@ function Header() {
                                     Giỏ hàng
                                 </button>
                                 <span className="absolute -top-2 left-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                {cartQuantity}
+                                    {cartQuantity}
                                 </span>
                             </div>
                             <div className="relative">
@@ -169,16 +168,16 @@ function Header() {
                         </div>
                     ) : (
                         <div className="flex items-center space-x-6 mt-4 sm:mt-0">
-                            <div className='relative'>
+                            <div className="relative">
                                 <button
-                                className="flex items-center text-gray-600 hover:text-gray-800 mr-12"
-                                onClick={handleCartClick}
-                            >
+                                    className="flex items-center text-gray-600 hover:text-gray-800"
+                                    onClick={handleCartClick}
+                                >
                                     <ShoppingCartOutlined style={{ fontSize: '20px', marginRight: '12px' }} />
                                     Giỏ hàng
                                 </button>
                                 <span className="absolute -top-2 left-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                    0
+                                    {cartQuantity}
                                 </span>
                             </div>
 

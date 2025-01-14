@@ -35,10 +35,10 @@ const Cart = () => {
         };
         //debugger;
         // check if user is authenticated before fetching cart items
-        if (isAuthenticated && user.role.toLowerCase() === 'user') {  
+    //    if (isAuthenticated && user.role.toLowerCase() === 'user') {  
           fetchCartItems();
           getCartSummaryInfo();
-        }
+    //    }
         
       }, [cartUpdated]);
 
@@ -89,8 +89,12 @@ const Cart = () => {
     };
 
     const handleCheckout = () => {
+        // navigate to login page if user is not authenticated
+        if (!isAuthenticated) {
+            navigate('/auth/login');
+            return;
+        }
         const selectedItems = cartItems.filter((item) => item.selected);
-
         navigate('/checkout/payment', { state: { cartItems: selectedItems } });
     }
 

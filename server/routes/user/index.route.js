@@ -20,7 +20,9 @@ const userRoutes = (app) => {
     // Routes for products
     app.use('/api/products', require('./product.route')); 
 
-     app.use('/api/payment', require('./payment.route'));
+    app.use('/api/payment', require('./payment.route'));
+
+    app.use('/api/cart', attachOrCreateCartId, require('./cart.route'));
     
     // Middleware to verify JWT
     app.use(verifyJWT);
@@ -30,10 +32,7 @@ const userRoutes = (app) => {
 
     app.use('/api/users', require('./users.route'));
 
-    app.use('/api/orders', require('./order.route'));
-
-    app.use('/api/cart', require('./cart.route'));
-   
+    app.use('/api/orders', require('./order.route'));   
 
     // User routes
     app.use('/api/users', require('./users.route'));

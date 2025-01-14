@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../redux/actions/user/authAction';
 import SERVER_URL from '../../config/config';
 import { selectAuth, clearError, clearSuccess } from '../../redux/reducers/user/authReducer';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -18,6 +19,7 @@ const Login = () => {
     // get type of login from query params
     const type = new URLSearchParams(location.search).get('type') || 'user';
 
+    const axiosPrivate = useAxiosPrivate();
     // Access Redux state 
     const  {user, error, loading, isAuthenticated} = useSelector(selectAuth);
     const [errorChanged, setErrorChanged] = useState('');
@@ -38,8 +40,16 @@ const Login = () => {
     }
     
     useEffect(() => {
+        const mergeCart = async () => {
+            try {
+                await axiosPrivate.post('api/cart/merge-session');
+            } catch (error) {
+                console.error('Failed to merge cart:', error);
+            }
+        };
+
         if (isAuthenticated) {
-            
+
             if (from && from !== '/') {
                 navigate(from, { replace: true });
             } else {
@@ -47,6 +57,9 @@ const Login = () => {
                     navigate('/Admin', { replace: true });
                 }
                 else if (type === 'user' && user.role && user.role.includes('User')) {
+                    debugger;
+                    console.log('user role', user.role);
+                    mergeCart();
                     navigate('/', { replace: true });
                 }
                 else if (type === 'seller' && user.role && user.role.includes('Seller')) {
@@ -65,10 +78,11 @@ const Login = () => {
         e.preventDefault();   
         
         await dispatch(login({ username, password, type }));
-        console.log('login' + username + password + type);
+    //    console.log('login' + username + password + type);
 
         setUsername('');
-        setPassword('');    
+        setPassword('');
+    
     }
 
     const handleGoogleLogin = () => {
@@ -124,13 +138,6 @@ const Login = () => {
                 <div className="w-full border-t border-gray-800"></div>
                 { type.toLowerCase() !== 'admin' &&
                     <div className="flex">
-                        <button
-                            className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 mr-4 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            type="button"
-                        >
-                            <Facebook className="h-5 w-5 mr-2 text-blue-800" />
-                            Facebook
-                        </button>
                         <button
                             onClick={handleGoogleLogin}
                             className="w-full flex items-center justify-center px-4 py-2 border border-gray-500 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
