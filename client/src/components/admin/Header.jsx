@@ -4,7 +4,7 @@ import { selectAuth } from '../../redux/reducers/user/authReducer';
 import { Notifications } from '../../components/admin/Notifications';
 import { logout } from '../../redux/actions/user/authAction';
 import { useNavigate } from 'react-router-dom';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';

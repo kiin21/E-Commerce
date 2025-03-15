@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSellerAnalytics } from '../../redux/actions/admin/sellerManagementAction';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { Card, Row, Col, Typography, Statistic, Space, Button, Divider, Spin, Pagination } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';

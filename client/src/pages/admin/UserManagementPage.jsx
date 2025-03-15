@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Table, Space, Button, Input, Card, Typography, Tooltip, Modal, message, Select } from 'antd';
 import { fetchUsers, activateUser, deactivateUser } from '../../redux/actions/admin/userManagementAction';
 import { setUsersPagination } from '../../redux/reducers/admin/userReducer';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import {
     EyeOutlined,
     EditOutlined,

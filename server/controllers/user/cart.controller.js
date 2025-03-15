@@ -98,9 +98,6 @@ const getCartItems = async (req, res) => {
 const addToCartItem = async (req, res) => {
     const { itemId, quantity, selected } = req.body;
 
-    console.log('itemId: ', itemId);
-    console.log('quantity: ', quantity);
-
     try {
 
         if (!req.user) {

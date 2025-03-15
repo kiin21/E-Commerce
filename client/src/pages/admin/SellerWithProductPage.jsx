@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Space, Button, Input, Card, Typography, Tooltip, message, Tag } from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchSellerProducts } from '../../redux/actions/admin/sellerManagementAction';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useDispatch } from 'react-redux';
 import {
     SearchOutlined,

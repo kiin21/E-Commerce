@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 import { selectAuth } from '../redux/reducers/user/authReducer';
 import useRefreshToken from "./useRefreshToken";
 
-const useAxiosPrivate = () => {
+export const useAxiosPrivate = () => {
     const refreshToken = useRefreshToken();
     const { user } = useSelector(selectAuth);
-    
+
     //  const { auth } = useAuth();
 
     useEffect(() => {
@@ -48,5 +48,3 @@ const useAxiosPrivate = () => {
 
     return axiosPrivate;
 };
-
-export default useAxiosPrivate;

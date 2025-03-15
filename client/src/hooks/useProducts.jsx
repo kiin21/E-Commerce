@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getAllProducts } from '../services/seller/productApi';
-import useAxiosPrivate from './useAxiosPrivate';
+import { useAxiosPrivate } from './useAxiosPrivate';
 
 // Custom hook để quản lý việc tải và tìm kiếm sản phẩm
 const useProducts = (searchTerm = '', page = 1, limit = 50) => {
@@ -14,10 +14,10 @@ const useProducts = (searchTerm = '', page = 1, limit = 50) => {
   const loadProducts = async (search = '', page = 1) => {
     setLoading(true);
     try {
-      const { data, total: totalCount } = await getAllProducts({axiosPrivate, search, page, limit });
+      const { data, total: totalCount } = await getAllProducts({ axiosPrivate, search, page, limit });
       setProducts((prevProducts) => {
-        if (page === 1) return data; 
-        return [...prevProducts, ...data]; 
+        if (page === 1) return data;
+        return [...prevProducts, ...data];
       });
       setTotal(totalCount);
     } catch (error) {

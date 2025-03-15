@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { Radio, Pagination, Spin } from 'antd';
 import { StarFilled } from '@ant-design/icons';
-import { getSearchResults } from "../../redux/services/user/searchService";
+import  searchService from "../../redux/services/user/searchService";
 import ProductCard from './ProductCard';
 
 function ProductSearchList() {
@@ -40,7 +40,7 @@ function ProductSearchList() {
         const fetchResults = async () => {
             setStatus('loading');
             try {
-                const response = await getSearchResults({
+                const response = await searchService.getSearchResults({
                     keyword,
                     limit,
                     page: currentPage,

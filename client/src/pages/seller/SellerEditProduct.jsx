@@ -5,7 +5,7 @@ import { Form, Input, InputNumber, Button, Select, Upload, message, Space, Table
 import { UploadOutlined, MinusCircleOutlined, PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import useCategories from '../../hooks/useCategories';
 import { uploadImages } from '../../helpers/upload';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { RichTextEditor } from '../../components/seller/RichTextEditor';
 
 const { Option } = Select;

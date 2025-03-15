@@ -3,7 +3,7 @@ import { Row, Col, Card, Button, InputNumber, Typography, Divider, Space, Checkb
 import { DeleteOutlined, ShopOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 import { getCartItems, updateCartItem, deleteCartItem, getCartSummary } from '../../redux/services/user/cartService';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { setCartQuantity } from "../../redux/reducers/user/cartReducer";
@@ -18,27 +18,27 @@ const Cart = () => {
   const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector(selectAuth);
 
-    useEffect(() => {
-        if (!cartUpdated) return;
-        
-        const fetchCartItems = async () => {
-        const response = await getCartItems(axiosPrivate);
-    
-          if (!response.success) {
-            return;
-          }
-    
-          setCartItems(response.cartItems);
-          setCartUpdated(false);
-        };
-        //debugger;
-        // check if user is authenticated before fetching cart items
+  useEffect(() => {
+    if (!cartUpdated) return;
+
+    const fetchCartItems = async () => {
+      const response = await getCartItems(axiosPrivate);
+
+      if (!response.success) {
+        return;
+      }
+
+      setCartItems(response.cartItems);
+      setCartUpdated(false);
+    };
+    //debugger;
+    // check if user is authenticated before fetching cart items
     //    if (isAuthenticated && user.role.toLowerCase() === 'user') {  
-          fetchCartItems();
-          getCartSummaryInfo();
+    fetchCartItems();
+    getCartSummaryInfo();
     //    }
-        
-      }, [cartUpdated]);
+
+  }, [cartUpdated]);
 
   const groupedItems = cartItems.reduce((acc, item) => {
     const sellerId = item.product.current_seller.id;
@@ -82,15 +82,15 @@ const Cart = () => {
     setCartSummary(response.cartSummary);
   };
 
-    const handleCheckout = () => {
-        // navigate to login page if user is not authenticated
-        if (!isAuthenticated) {
-            navigate('/auth/login');
-            return;
-        }
-        const selectedItems = cartItems.filter((item) => item.selected);
-        navigate('/checkout/payment', { state: { cartItems: selectedItems } });
+  const handleCheckout = () => {
+    // navigate to login page if user is not authenticated
+    if (!isAuthenticated) {
+      navigate('/auth/login');
+      return;
     }
+    const selectedItems = cartItems.filter((item) => item.selected);
+    navigate('/checkout/payment', { state: { cartItems: selectedItems } });
+  }
 
   return (
     <div className="p-5">

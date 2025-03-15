@@ -13,7 +13,7 @@ const getSuggestions = async ({ keyword }) => {
 }
 
 // GET /api/products?limit=24&page=1&q=apple&rating=4,5&price=100,200&sort=default(popular)||price,asc||price,desc||newest||top_seller
-export const getSearchResults = async (
+const getSearchResults = async (
     {
         keyword,
         limit = 24,
@@ -64,4 +64,5 @@ export const getSearchResults = async (
 
 export default {
     getSuggestions,
+    getSearchResults
 };

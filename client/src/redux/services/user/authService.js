@@ -81,7 +81,7 @@ const resetPassword = async ({ email, newPassword }) => {
 
 // Refresh token function
 const refreshToken = async () => {
-  
+
     const response = await axios.post('api/auth/token/refresh', null, {
         withCredentials: true,
     });

@@ -6,7 +6,7 @@ import { Spin } from 'antd';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Alert, AlertDescription } from '../../components/ui/alert';
 import { fetchOneSeller } from '../../redux/actions/admin/sellerManagementAction';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { ImageUpload } from '../../components/admin/ImageUpload';
 import { uploadImages } from '../../helpers/upload';
 

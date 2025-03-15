@@ -3,7 +3,7 @@ import { Card, Form, Input, Switch, Button, Space, Typography, message, Upload, 
 import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import { uploadImages } from '../../helpers/upload';
 import useCategories from '../../hooks/useCategories';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import slugify from 'slugify';
 
 const { Title } = Typography;

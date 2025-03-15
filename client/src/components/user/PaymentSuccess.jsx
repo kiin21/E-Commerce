@@ -2,7 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { HomeIcon } from "lucide-react";
 import { useEffect } from "react";
 import { updateOrder } from "../../redux/services/user/orderService";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
 
 const PaymentSuccess = () => {
     const [searchParams] = useSearchParams();
@@ -13,7 +13,7 @@ const PaymentSuccess = () => {
     useEffect(() => {
         debugger;
         if (orderId) {
-            
+
             updateOrderId();
         }
 
@@ -35,7 +35,7 @@ const PaymentSuccess = () => {
                 Thank you for your purchase
                 <span role="img" aria-label="smile">😊</span>
             </p>
-            <button 
+            <button
                 className="mt-6 px-6 py-3 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
                 onClick={() => window.location.href = "/"}
             >

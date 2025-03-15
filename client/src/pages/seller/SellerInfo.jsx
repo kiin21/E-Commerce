@@ -3,7 +3,7 @@ import { getSellerInfo, updateSellerInfo } from '../../services/seller/infoApi';
 import { getStore, updateStore } from '../../services/seller/storeApi';
 import { getTopSellingProducts } from '../../services/seller/productApi';
 import TopProducts from '../../components/seller/TopProducts';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { uploadImages } from '../../helpers/upload';
 import { Card, Typography, Input, Button, Upload, Space, message, Spin } from 'antd';
 import {
@@ -147,7 +147,7 @@ const SellerInfo = () => {
       <Card className="shadow-lg p-6">
         <Title level={3}>Thông tin người bán</Title>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <Input
+          <Input
             addonBefore={<UserOutlined />}
             name="username"
             value={sellerInfo.username || ''}

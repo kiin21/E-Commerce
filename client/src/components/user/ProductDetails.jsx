@@ -5,7 +5,7 @@ import { FaStar } from "react-icons/fa";
 import Review from "./ProductReview";
 import Recommend from "./Recommend";
 import QuantityControl from "./QuantityControl";
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { addToCardItem } from '../../redux/services/user/cartService';
 import { setCartQuantity } from "../../redux/reducers/user/cartReducer";
 import { useDispatch } from "react-redux";
@@ -73,7 +73,7 @@ const ProductDetails = () => {
     };
 
     const handleCheckout = () => {
-        
+
         const cartItems = [{ product_id: product.id, quantity, product }];
         navigate('/checkout/payment', {
             state: { cartItems }

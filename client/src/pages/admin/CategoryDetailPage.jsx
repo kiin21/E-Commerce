@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Card, Form, Input, Switch, Button, Space, Typography, message, Spin, Upload } from 'antd';
 import { ArrowLeftOutlined, UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import { fetchOneCategory } from '../../redux/actions/admin/categoryManagementAction';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { uploadImages } from '../../helpers/upload';
 import { updateCategory } from '../../services/seller/categoryApi';
 const { Title } = Typography;

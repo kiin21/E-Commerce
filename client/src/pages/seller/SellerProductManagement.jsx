@@ -3,7 +3,7 @@ import { Table, Card, Space, Input, Tooltip, Button, Typography, Modal, message,
 import { EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { deleteMultipleProductsById, deleteProductById, getProductsOfStore } from '../../services/seller/productApi';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 
 const { confirm } = Modal;
 const { Text } = Typography;

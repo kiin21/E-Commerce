@@ -4,7 +4,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { Table, Space, Button, Input, Card, Typography, Tooltip, Modal, message, Select } from 'antd';
 import { fetchSellers, activateSeller, deactivateSeller } from '../../redux/actions/admin/sellerManagementAction';
 import { setSellersPagination } from '../../redux/reducers/admin/sellerReducer';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import {
     SearchOutlined,
     EyeOutlined,

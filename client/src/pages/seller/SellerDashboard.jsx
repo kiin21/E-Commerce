@@ -13,10 +13,10 @@ import {
     Package,
 } from 'lucide-react';
 import Select from 'react-select';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 const { Text } = Typography;
 
-const SellerDashboard = () => {  
+const SellerDashboard = () => {
     const lineChartData = [
         { name: 'Jan', value: 100 },
         { name: 'Feb', value: 120 },
@@ -195,10 +195,10 @@ const SellerDashboard = () => {
         {
             title: 'Ảnh', key: 'image', width: '80px',
             render: (_, record) => (
-                <img 
-                    src={(Array.isArray(record.thumbnails) && record.thumbnails[0]) || ''} 
-                    alt={record.name || 'No image'} 
-                    className="w-10 h-10 object-cover border rounded" 
+                <img
+                    src={(Array.isArray(record.thumbnails) && record.thumbnails[0]) || ''}
+                    alt={record.name || 'No image'}
+                    className="w-10 h-10 object-cover border rounded"
                 />
             ),
         },
@@ -218,8 +218,8 @@ const SellerDashboard = () => {
         {
             title: 'Đánh giá', dataIndex: 'rating', key: 'rating',
             render: (rating) =>
-              rating !== undefined && rating !== null ? `${parseFloat(rating).toFixed(1)} ⭐` : 'No rating',
-            },
+                rating !== undefined && rating !== null ? `${parseFloat(rating).toFixed(1)} ⭐` : 'No rating',
+        },
         {
             title: 'Doanh thu', dataIndex: 'earnings', key: 'earnings',
             render: (price) =>
@@ -236,10 +236,10 @@ const SellerDashboard = () => {
             render: (_, record) => (
                 <Tooltip title="View Product">
                     <Button
-                    type="link"
-                    icon={<EyeOutlined />}
-                    onClick={() => handleView(record)}
-                    className="text-blue-600 p-0 hover:text-blue-800"
+                        type="link"
+                        icon={<EyeOutlined />}
+                        onClick={() => handleView(record)}
+                        className="text-blue-600 p-0 hover:text-blue-800"
                     />
                 </Tooltip>
             )
@@ -249,7 +249,8 @@ const SellerDashboard = () => {
     const potentialCustomersColumns = [
         { title: 'Khách hàng', dataIndex: 'username', key: 'username' },
         { title: 'Email', dataIndex: 'email', key: 'email' },
-        { title: 'Tổng chi tiêu', dataIndex: 'totalSpending', key: 'totalSpending',
+        {
+            title: 'Tổng chi tiêu', dataIndex: 'totalSpending', key: 'totalSpending',
             render: (price) =>
                 price ? (
                     <span style={{ color: 'green' }}>
@@ -281,24 +282,24 @@ const SellerDashboard = () => {
                 let text = '';
                 switch (status) {
                     case 'processing':
-                      color = 'orange';
-                      text = 'Chờ duyệt';
-                      break;
+                        color = 'orange';
+                        text = 'Chờ duyệt';
+                        break;
                     case 'delivered':
-                      color = 'green';
-                      text = 'Đang vận chuyển';
-                      break;
+                        color = 'green';
+                        text = 'Đang vận chuyển';
+                        break;
                     case 'shipped':
-                      color = 'blue';
-                      text = 'Đơn hàng thành công';
-                      break;
+                        color = 'blue';
+                        text = 'Đơn hàng thành công';
+                        break;
                     case 'cancelled':
-                      color = 'red';
-                      text = 'Đã hủy';
-                      break;
+                        color = 'red';
+                        text = 'Đã hủy';
+                        break;
                     default:
-                      return null;
-                  }
+                        return null;
+                }
                 return <Tag color={color}>{text}</Tag>;
             },
         },
@@ -412,7 +413,7 @@ const SellerDashboard = () => {
                         }}
                     />
                 </div>
-                
+
                 {/* Sales Overview */}
                 <div className="bg-white p-6 rounded-lg shadow mb-8">
                     <div className="flex justify-between items-center mb-6">
@@ -427,26 +428,26 @@ const SellerDashboard = () => {
                                 value: year,
                                 label: year
                             }))}
-                            >
+                        >
                         </Select>
                     </div>
                     <div style={{ width: '100%', height: '500px' }}>
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart 
-                            width={1000} height={600} data={salesData} 
-                            margin={{ top: 20, right: 20, left: 40, bottom: 20 }} 
-                            barCategoryGap="20%"
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                                width={1000} height={600} data={salesData}
+                                margin={{ top: 20, right: 20, left: 40, bottom: 20 }}
+                                barCategoryGap="20%"
                             >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="month"/>
-                            <YAxis
-                                tickFormatter={formatCurrency} // Format Y-axis as currency
-                                domain={[0, (dataMax) => (dataMax > 0 ? dataMax * 1.5 : 100000)]} // Ensure some padding above max value 
-                            />
-                            <TooltipRecharts />
-                            <Bar dataKey="value" fill="#3b82f6" />
-                        </BarChart>
-                    </ResponsiveContainer>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="month" />
+                                <YAxis
+                                    tickFormatter={formatCurrency} // Format Y-axis as currency
+                                    domain={[0, (dataMax) => (dataMax > 0 ? dataMax * 1.5 : 100000)]} // Ensure some padding above max value 
+                                />
+                                <TooltipRecharts />
+                                <Bar dataKey="value" fill="#3b82f6" />
+                            </BarChart>
+                        </ResponsiveContainer>
                     </div>
                 </div>
 

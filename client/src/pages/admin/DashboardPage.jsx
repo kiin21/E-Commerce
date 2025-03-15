@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRecentOrders, fetchRecentCustomers, fetchTopSellers, fetchUserGrowth } from '../../redux/actions/admin/salesAnalyticsAction';
 import { selectRecentOrders, selectRecentCustomers, selectTopSellers, selectUserGrowth } from '../../redux/reducers/admin/salesAnalyticsReducer';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { RecentOrdersTable } from '../../components/admin/RecentOrdersTable';
 import { UserGrowthOverview } from '../../components/admin/UserGrowthOverview';
 import { RecentCustomerList } from '../../components/admin/RecentCustomer';

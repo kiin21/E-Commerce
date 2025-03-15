@@ -5,7 +5,7 @@ import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 const { confirm } = Modal;
 const { Text } = Typography;
 import Select from 'react-select';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import useProducts from '../../hooks/useProducts'; // Import custom hook
 
 

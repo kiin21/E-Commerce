@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../redux/actions/user/authAction';
 import SERVER_URL from '../../config/config';
 import { selectAuth, clearError, clearSuccess } from '../../redux/reducers/user/authReducer';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -21,9 +21,9 @@ const Login = () => {
 
     const axiosPrivate = useAxiosPrivate();
     // Access Redux state 
-    const  {user, error, loading, isAuthenticated} = useSelector(selectAuth);
+    const { user, error, loading, isAuthenticated } = useSelector(selectAuth);
     const [errorChanged, setErrorChanged] = useState('');
-    
+
     useEffect(() => {
         setErrorChanged(error);
     }, [error]); // This ensures the state is updated only when `error` changes
@@ -38,7 +38,7 @@ const Login = () => {
     const togglePassword = () => {
         setShowPassword(!showPassword);
     }
-    
+
     useEffect(() => {
         const mergeCart = async () => {
             try {
@@ -66,7 +66,7 @@ const Login = () => {
                     navigate('/Seller', { replace: true });
                 }
                 else {
-                    setErrorChanged('invalid credentials');       
+                    setErrorChanged('invalid credentials');
                     // clear user in redux
                 }
             }
@@ -74,20 +74,19 @@ const Login = () => {
     }, [isAuthenticated, user, from, navigate]);
 
 
-    const handleSubmit = async(e) => {
-        e.preventDefault();   
-        
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
         await dispatch(login({ username, password, type }));
 
         setUsername('');
         setPassword('');
-    
+
     }
 
     const handleGoogleLogin = () => {
         const typeParam = encodeURIComponent(type.toLowerCase()); // Ensure the type is URL-safe
-        let svurl =  SERVER_URL;
-        debugger
+
         window.location.href = `${SERVER_URL}/api/auth/google?type=${typeParam}`;
     };
 
@@ -107,7 +106,7 @@ const Login = () => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     className="p-2 border border-gray-300 rounded w-full"
-                    
+
                 />
                 <div className="relative">
                     <input
@@ -117,7 +116,7 @@ const Login = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="p-2 border border-gray-300 rounded w-full pr-10"
-                        
+
                     />
                     <button
                         type='button'
@@ -135,9 +134,9 @@ const Login = () => {
                 </button>
                 <p className='text-sm text-blue-600 text-right'>
                     <Link to="/auth/forget-password" className="hover:underline">Forget Password</Link>
-                </p> 
+                </p>
                 <div className="w-full border-t border-gray-800"></div>
-                { type.toLowerCase() !== 'admin' &&
+                {type.toLowerCase() !== 'admin' &&
                     <div className="flex">
                         <button
                             onClick={handleGoogleLogin}
@@ -153,15 +152,15 @@ const Login = () => {
                 {type.toLowerCase() !== 'admin' &&
                     <div className="mt-6 text-center text-sm">
                         <span className="text-gray-600">You are new to Shobee? </span>
-                        <Link 
-                            to={`/auth/register?type=${type.toLowerCase()}`} 
+                        <Link
+                            to={`/auth/register?type=${type.toLowerCase()}`}
                             className="font-medium text-blue-500 hover:text-blue-700 hover:underline"
                         >
                             Register
                         </Link>
                     </div>
                 }
-            </form>   
+            </form>
         </div>
     );
 };

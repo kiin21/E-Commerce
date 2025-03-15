@@ -5,7 +5,7 @@ import { addProduct } from '../../services/seller/productApi';
 import { uploadImages } from '../../helpers/upload';
 import { useNavigate } from 'react-router-dom';
 import useCategories from '../../hooks/useCategories';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import slugify from 'slugify';
 import { RichTextEditor } from '../../components/seller/RichTextEditor';
 

@@ -8,4 +8,4 @@ const getUserByEmail = async (axiosPrivate, email) => {
     return response.data;
 };
 
-export default { getUserById, getUserByEmail };
+export { getUserById, getUserByEmail };

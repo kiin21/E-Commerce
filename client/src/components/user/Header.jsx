@@ -7,7 +7,7 @@ import logo from "../../assets/logo.png";
 import Search from './Search';
 import { setSearchQuery } from '../../redux/reducers/user/searchReducer';
 import { getCartItems } from '../../redux/services/user/cartService';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { selectCartQuantity } from '../../redux/reducers/user/cartReducer';
 import { setCartQuantity } from '../../redux/reducers/user/cartReducer';
 import { logout } from '../../redux/actions/user/authAction';
@@ -20,26 +20,26 @@ function Header() {
     const dispatch = useDispatch();
     const cartQuantity = useSelector(selectCartQuantity);
     const axiosPrivate = useAxiosPrivate();
-    
+
     useEffect(() => {
         // Update cart quantity in the header initially and whenever the cart changes
         const fetchCartItems = async () => {
             const response = await getCartItems(axiosPrivate);
-            
+
             if (!response.success) {
                 return;
             }
-
+            debugger;
             const quantity = response.cartItems.length;
-        
+
 
             dispatch(setCartQuantity(quantity));
         };
         // check if user is authenticated before fetching cart items
-    //    if (isAuthenticated && user.role.toLowerCase() === 'user') {
-            fetchCartItems();
+        //    if (isAuthenticated && user.role.toLowerCase() === 'user') {
+        fetchCartItems();
         //    console.log('User: ', user);
-    //    }
+        //    }
     }, []);
 
     const handleClickLogo = () => {
@@ -64,7 +64,7 @@ function Header() {
         navigate('/checkout/cart');
     }
 
-    const handleLogout = async() => {
+    const handleLogout = async () => {
         await dispatch(logout({ axiosPrivate }));
         // Redirect to login after logout
         navigate('/auth/login');
@@ -86,7 +86,7 @@ function Header() {
                     <p className="text-gray-600 hover:text-gray-800 mr-10">
                         <Link to="/auth/login?type=seller">Kênh bán hàng</Link>
                     </p>
-                           
+
 
                     {/* Wrapper for logo and text */}
                     <div className="flex flex-col items-center sm:items-start">
@@ -105,13 +105,13 @@ function Header() {
                     <Search />
 
                     {/* Conditional Rendering for User Login */}
-                    {(isAuthenticated && user.role.toLowerCase() === 'user')? (
+                    {(isAuthenticated && user.role.toLowerCase() === 'user') ? (
                         <div className="flex items-center space-x-6 mt-4 sm:mt-0">
                             <div className="relative">
                                 <button
-                                className="flex items-center text-gray-600 hover:text-gray-800"
-                                onClick={handleCartClick}
-                            >
+                                    className="flex items-center text-gray-600 hover:text-gray-800"
+                                    onClick={handleCartClick}
+                                >
                                     <ShoppingCartOutlined style={{ fontSize: '20px', marginRight: '12px' }} />
                                     Giỏ hàng
                                 </button>

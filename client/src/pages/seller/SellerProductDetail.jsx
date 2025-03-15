@@ -4,7 +4,7 @@ import { getProductById } from '../../services/seller/productApi';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { FaChevronLeft, FaChevronRight, FaArrowLeft } from 'react-icons/fa';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 
 const SellerProductDetail = () => {
   const { productId } = useParams();

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Tag, Avatar, Typography, List, Divider, Button, message, Space } from 'antd';
 import { getOrders, updateOrderStatus } from '../../services/seller/orderApi';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;

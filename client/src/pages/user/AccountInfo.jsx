@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Typography, Space, Descriptions, Spin, message, Button, Tooltip } from 'antd';
 import { UserOutlined, MailOutlined, EnvironmentOutlined, CopyOutlined, ArrowLeftOutlined } from '@ant-design/icons';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;

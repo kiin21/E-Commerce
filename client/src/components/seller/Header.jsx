@@ -7,7 +7,7 @@ import { logout } from "../../redux/actions/user/authAction";
 import {
     User,
 } from 'lucide-react';
-import useAxiosPrivate  from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ const Header = () => {
 
     // Handler for logout
     const handleLogout = () => {
-        dispatch(logout({axiosPrivate})); // Assuming you have a logout action
+        dispatch(logout({ axiosPrivate })); // Assuming you have a logout action
         navigate("/auth/login?type=seller"); // Navigate to login page after logout
     };
 
@@ -44,7 +44,7 @@ const Header = () => {
     // Close the dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target) && 
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
                 userMenuRef.current && !userMenuRef.current.contains(event.target)) {
                 setIsDropdownOpen(false); // Close the dropdown
             }
@@ -63,14 +63,14 @@ const Header = () => {
                 <div className="flex items-center space-x-2 relative" ref={userMenuRef}>
                     {isAuthenticated ? (
                         <>
-                            <span 
-                                className="p-2 bg-gray-100 rounded-full cursor-pointer" 
-                                onClick={toggleDropdown} 
+                            <span
+                                className="p-2 bg-gray-100 rounded-full cursor-pointer"
+                                onClick={toggleDropdown}
                             >
                                 <User className="w-6 h-6 text-gray-600" />
                             </span>
-                            <span 
-                                onClick={toggleDropdown} 
+                            <span
+                                onClick={toggleDropdown}
                                 className="cursor-pointer flex items-center space-x-2"
                             >
                                 <span>{user.username}</span>
@@ -79,18 +79,18 @@ const Header = () => {
 
                             {/* Dropdown Menu */}
                             {isDropdownOpen && (
-                                <div 
-                                    ref={dropdownRef} 
+                                <div
+                                    ref={dropdownRef}
                                     className="absolute right-0 top-4 mt-2 w-40 bg-white border rounded shadow-lg z-50"
                                 >
-                                    <button 
-                                        onClick={() => handleMenuClick("profile")} 
+                                    <button
+                                        onClick={() => handleMenuClick("profile")}
                                         className="w-full text-left p-2 text-sm hover:bg-gray-100"
                                     >
                                         Profile
                                     </button>
-                                    <button 
-                                        onClick={() => handleMenuClick("logout")} 
+                                    <button
+                                        onClick={() => handleMenuClick("logout")}
                                         className="w-full text-left p-2 text-sm text-red-500 hover:bg-gray-100"
                                     >
                                         Logout

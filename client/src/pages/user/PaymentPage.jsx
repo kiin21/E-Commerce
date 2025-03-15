@@ -3,7 +3,7 @@ import { CreditCard, Package, Truck } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import generateDeliveryDateTime from '../../utils/generateDeliveryDateTime';
 import { handleCheckout, createPaymentUrl, performSubsystemPayment } from '../../redux/services/user/paymentService';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import PayPalWrapper from '../../components/user/PayPalWrapper';
 import { createOrder, updateOrder } from '../../redux/services/user/orderService';
 import { selectUser } from '../../redux/reducers/user/authReducer';
@@ -37,7 +37,7 @@ const PaymentPage = () => {
         const price = item.product.price * item.quantity; // Discounted price of the item
         const originalPrice = item.product.original_price * item.quantity; // Original price of the item
         const discount = originalPrice - price; // Discount applied to the item
-    
+
         // Update accumulators
         acc.total += price; // Total (after discounts)
         acc.subtotal += originalPrice; // Subtotal (before discounts)
@@ -45,7 +45,7 @@ const PaymentPage = () => {
         acc.shipping += 10000; // Fixed shipping cost per item (can adjust logic if needed)
         acc.sellerDiscount += 0; // Add seller-specific discounts here if applicable
         acc.shippingDiscount += 5000; // Fixed shipping discount per item
-    
+
         return acc;
       },
       {
@@ -54,7 +54,7 @@ const PaymentPage = () => {
     );
 
     // Final adjustment to calculate combined discount
-    calculatedOrderDetails.discount = calculatedOrderDetails.subtotal - calculatedOrderDetails.total;  
+    calculatedOrderDetails.discount = calculatedOrderDetails.subtotal - calculatedOrderDetails.total;
 
     setOrderDetails(calculatedOrderDetails);
 
@@ -62,26 +62,26 @@ const PaymentPage = () => {
     const groupedItems = cartItems.reduce((acc, item) => {
       const sellerId = item.product.current_seller.id;
       if (!acc[sellerId]) {
-      acc[sellerId] = {
+        acc[sellerId] = {
           seller_name: item.product.current_seller.name,
           items: [],
-      };
+        };
       }
       acc[sellerId].items.push(item);
       return acc;
     }, {});
-  
+
     // Convert grouped items to deliveries
     const calculatedDeliveries = Object.values(groupedItems).map((group, index) => ({
       id: index + 1,
       date: "Giao vào: " + generateDeliveryDateTime(3), // Replace with actual delivery date
       items: group.items.map((item) => ({
-      name: item.product.name,
-      image: item.product.thumbnail_url,
-      quantity: `x${item.quantity}`,
-      price: item.product.price * item.quantity,
-      originalPrice: item.product.original_price * item.quantity,
-      shipper: group.seller_name,
+        name: item.product.name,
+        image: item.product.thumbnail_url,
+        quantity: `x${item.quantity}`,
+        price: item.product.price * item.quantity,
+        originalPrice: item.product.original_price * item.quantity,
+        shipper: group.seller_name,
       })),
     }));
 
@@ -103,7 +103,7 @@ const PaymentPage = () => {
     const response = await getUserByEmail(axiosPrivate, user.email);
     return response.shipping_address;
   };
-  
+
   const handlePayment = async () => {
     const orderItems = convertCartItemsToOrderItems(cartItems);
     const shippingAddress = await getShippingAddress();
@@ -116,12 +116,12 @@ const PaymentPage = () => {
 
     // get order id
     const orderId = response.data.id;
-    
-    if (selectedPayment === 'cash') {      
-        alert('Thanh toán tiền mặt khi nhận hàng');
+
+    if (selectedPayment === 'cash') {
+      alert('Thanh toán tiền mặt khi nhận hàng');
     } else if (selectedPayment === 'stripe') {
-        const totalPrice = orderDetails.total;
-        handleCheckout(axiosPrivate, cartItems, totalPrice, orderId);
+      const totalPrice = orderDetails.total;
+      handleCheckout(axiosPrivate, cartItems, totalPrice, orderId);
     } else if (selectedPayment === 'vnpay') {
       // orderInfo include name, price, quantity  
       const orderInfo = cartItems.map((item) => ({
@@ -132,7 +132,7 @@ const PaymentPage = () => {
       const amount = orderDetails.total;
       debugger;
       await createPaymentUrl(axiosPrivate, orderInfo, amount, orderId);
-      
+
       // update order status to processing from order id
       await updateOrder(axiosPrivate, orderId, 'processing', shippingAddress);
 
@@ -142,20 +142,20 @@ const PaymentPage = () => {
     } else if (selectedPayment === 'subsystem') {
       const response = await getUserByEmail(axiosPrivate, user.email);
       const success = await performSubsystemPayment(
-          axiosPrivate,
-          orderDetails.total,
-          response.id,
-          response.username,
-          orderId
+        axiosPrivate,
+        orderDetails.total,
+        response.id,
+        response.username,
+        orderId
       );
-      
+
       if (success) {
-          await updateOrder(axiosPrivate, orderId, 'processing', shippingAddress);
-          const itemIds = cartItems.map((item) => item.product_id);
-          await deleteCartItem(axiosPrivate, { itemIds });
-          navigate('/checkout/success');
+        await updateOrder(axiosPrivate, orderId, 'processing', shippingAddress);
+        const itemIds = cartItems.map((item) => item.product_id);
+        await deleteCartItem(axiosPrivate, { itemIds });
+        navigate('/checkout/success');
       } else {
-          navigate('/checkout/failure');
+        navigate('/checkout/failure');
       }
     }
 
@@ -215,7 +215,7 @@ const PaymentPage = () => {
         {/* Payment Methods */}
         <div className="bg-white rounded-lg p-4 shadow-sm">
           <h3 className="text-lg font-medium mb-4">Chọn hình thức thanh toán</h3>
-          
+
           <div className="space-y-3">
             <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
               <input
@@ -241,9 +241,9 @@ const PaymentPage = () => {
                 onChange={(e) => setSelectedPayment(e.target.value)}
                 className="mr-3"
               />
-              <img 
-                src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" 
-                alt="PayPal" 
+              <img
+                src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg"
+                alt="PayPal"
                 className="w-8 h-8 mr-3 rounded"
               />
               <span>PayPal</span>
@@ -280,15 +280,15 @@ const PaymentPage = () => {
 
             <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
               <input
-                  type="radio"
-                  name="payment"
-                  value="subsystem"
-                  checked={selectedPayment === 'subsystem'}
-                  onChange={(e) => setSelectedPayment(e.target.value)}
-                  className="mr-3"
+                type="radio"
+                name="payment"
+                value="subsystem"
+                checked={selectedPayment === 'subsystem'}
+                onChange={(e) => setSelectedPayment(e.target.value)}
+                className="mr-3"
               />
               <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center mr-3">
-                  <CreditCard className="w-5 h-5 text-blue-600" />
+                <CreditCard className="w-5 h-5 text-blue-600" />
               </div>
               <span>Thanh toán bằng hệ thống phụ</span>
             </label>
@@ -300,52 +300,52 @@ const PaymentPage = () => {
       <div className="w-80">
         <div className="bg-white rounded-lg p-4 shadow-sm">
           <h3 className="text-lg font-medium mb-4">Đơn hàng</h3>
-          
-            <div className="space-y-3 mb-4">
-                <div className="flex justify-between">
-                <span className="text-gray-600">Tổng tiền hàng</span>
-                <span>{orderDetails.subtotal.toLocaleString()}đ</span>
-                </div>         
-                            
-                <div className="flex justify-between">
-                <span className="text-gray-600">Phí vận chuyển</span>
-                <span>{orderDetails.shipping.toLocaleString()}đ</span>
-                </div>
-                        
-                <div className="flex justify-between text-green-600">
-                <span>Giảm giá trực tiếp</span>
-                <span>{orderDetails.discount.toLocaleString()}đ</span>
-                </div>
-                
-                <div className="flex justify-between text-green-600">
-                <span>Mã khuyến mãi từ nhà bán</span>
-                <span>{orderDetails.sellerDiscount.toLocaleString()}đ</span>
-                </div>
-                
-                <div className="flex justify-between text-green-600">
-                <span>Giảm giá vận chuyển</span>
-                <span>{orderDetails.shippingDiscount.toLocaleString()}đ</span>
-                </div>
+
+          <div className="space-y-3 mb-4">
+            <div className="flex justify-between">
+              <span className="text-gray-600">Tổng tiền hàng</span>
+              <span>{orderDetails.subtotal.toLocaleString()}đ</span>
             </div>
 
-            <div className="border-t pt-4">
-                <div className="flex justify-between font-medium mb-1">
-                <span>Tổng tiền thanh toán</span>
-                <span className="text-red-600 text-xl">
-                    {orderDetails.total.toLocaleString()}đ
-                </span>
-                </div>
-                <p className="text-green-600 text-sm text-right">
-                (Tiết kiệm {orderDetails.totalSavings.toLocaleString()}đ)
-                </p>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Phí vận chuyển</span>
+              <span>{orderDetails.shipping.toLocaleString()}đ</span>
             </div>
 
-            <button
-                className="w-full bg-red-500 text-white rounded-lg py-3 mt-4 hover:bg-red-600"
-                onClick={handlePayment}
-            >
-                Đặt hàng
-            </button>
+            <div className="flex justify-between text-green-600">
+              <span>Giảm giá trực tiếp</span>
+              <span>{orderDetails.discount.toLocaleString()}đ</span>
+            </div>
+
+            <div className="flex justify-between text-green-600">
+              <span>Mã khuyến mãi từ nhà bán</span>
+              <span>{orderDetails.sellerDiscount.toLocaleString()}đ</span>
+            </div>
+
+            <div className="flex justify-between text-green-600">
+              <span>Giảm giá vận chuyển</span>
+              <span>{orderDetails.shippingDiscount.toLocaleString()}đ</span>
+            </div>
+          </div>
+
+          <div className="border-t pt-4">
+            <div className="flex justify-between font-medium mb-1">
+              <span>Tổng tiền thanh toán</span>
+              <span className="text-red-600 text-xl">
+                {orderDetails.total.toLocaleString()}đ
+              </span>
+            </div>
+            <p className="text-green-600 text-sm text-right">
+              (Tiết kiệm {orderDetails.totalSavings.toLocaleString()}đ)
+            </p>
+          </div>
+
+          <button
+            className="w-full bg-red-500 text-white rounded-lg py-3 mt-4 hover:bg-red-600"
+            onClick={handlePayment}
+          >
+            Đặt hàng
+          </button>
         </div>
         {showPayPal && orderIdGlobal && (
           <PayPalWrapper
@@ -363,10 +363,10 @@ const PaymentPage = () => {
           />
         )}
       </div>
-      
+
     </div>
 
-    )
+  )
 };
 
 export default PaymentPage;

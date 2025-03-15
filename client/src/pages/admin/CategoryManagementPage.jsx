@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Space, Button, Input, Card, Typography, Tooltip, message, Tag, Modal } from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchAllCategories, deleteCategory, restoreCategory } from '../../redux/actions/admin/categoryManagementAction';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useDispatch } from 'react-redux';
 import {
     PlusOutlined,

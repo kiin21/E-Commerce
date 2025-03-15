@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../../redux/reducers/user/authReducer';
 import { getUserByEmail } from '../../redux/services/user/userService';
@@ -69,7 +69,7 @@ const OrderManagement = () => {
             </button>
           ))}
         </div>
-        
+
         {/* Orders List */}
         <div className="space-y-4">
           {loading ? (
