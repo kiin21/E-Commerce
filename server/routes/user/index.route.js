@@ -15,7 +15,6 @@ const userRoutes = (app) => {
 
     // Google and Facebook OAuth routes
     app.use('/api/auth/google', require('./google-auth.route'));
-    // app.use('/api/auth/facebook', require('./facebook-auth.route'));
 
     // Routes for products
     app.use('/api/products', require('./product.route'));
@@ -29,9 +28,6 @@ const userRoutes = (app) => {
 
     // Middleware to verify JWT
     app.use(verifyJWT);
-
-    // Middleware to attach or create cart_id
-    // app.use(attachOrCreateCartId);
 
     app.use('/api/users', attachOrCreateCartId, require('./users.route'));
 

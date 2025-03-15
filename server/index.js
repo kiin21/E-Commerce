@@ -43,7 +43,6 @@ app.use(session({
     cookie: { secure: true } // Use secure: true for HTTPS
 }));
 
-
 // Sync all models with the database before starting the server and initializing Passport
 sequelize.sync({ force: false })
     .then(() => {
@@ -69,14 +68,7 @@ sequelize.sync({ force: false })
         // Error handler middleware
         app.use(errorHandler);
 
-        // Read SSL certificate and key
-        const sslOptions = {
-            key: fs.readFileSync(process.env.SSL_KEY_PATH),
-            cert: fs.readFileSync(process.env.SSL_CERT_PATH)
-        };
-
-        // Create HTTPS server
-        https.createServer(sslOptions, app).listen(PORT, () => {
+        app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
     })

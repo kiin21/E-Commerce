@@ -9,6 +9,5 @@ router.post("/vnpay/create-payment-url", createPaymentUrl);
 router.get("/vnpay/payment-return", handlePaymentReturn);
 router.post("/paypal/create-order", createOrder);
 router.post("/paypal/capture-order", captureOrder);
-router.post("/subsystem/process", require("../../controllers/user/paymentSubsystem.controller").processPayment);
 
 module.exports = router;
