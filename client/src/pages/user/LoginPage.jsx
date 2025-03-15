@@ -78,7 +78,6 @@ const Login = () => {
         e.preventDefault();   
         
         await dispatch(login({ username, password, type }));
-    //    console.log('login' + username + password + type);
 
         setUsername('');
         setPassword('');
@@ -87,6 +86,8 @@ const Login = () => {
 
     const handleGoogleLogin = () => {
         const typeParam = encodeURIComponent(type.toLowerCase()); // Ensure the type is URL-safe
+        let svurl =  SERVER_URL;
+        debugger
         window.location.href = `${SERVER_URL}/api/auth/google?type=${typeParam}`;
     };
 

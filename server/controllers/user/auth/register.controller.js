@@ -7,9 +7,9 @@ const { sendOTPVerificationEmail } = require('../../../services/mailer.service')
 
 const handleRegister = async (req, res) => {
     const { username, email, password, type } = req.body;
-    
+
     if (!username || !email || !password) {
-        return res.status(400).json({message: 'incorrect form submission'});
+        return res.status(400).json({ message: 'incorrect form submission' });
     }
 
     // check if username already exists
@@ -62,18 +62,18 @@ const handleRegister = async (req, res) => {
         return res.status(200).json({ message: 'OTP sent successfully. Please check your inbox' });
     } catch (err) {
         console.log(err);
-        return res.status(500).json({message: err.message});
+        return res.status(500).json({ message: err.message });
     }
 };
 
-const verifyRegistrationOTP = async(req, res) => {
-    const { email, otp } = req.body;  
-//    console.log(email, otp);
+const verifyRegistrationOTP = async (req, res) => {
+    const { email, otp } = req.body;
+    //    console.log(email, otp);
     if (!email || !otp) {
         return res.status(400).json({ message: 'incorrect form submission' });
     }
 
-    const {success, message} = await verifyOTP(email, otp, 'registration');
+    const { success, message } = await verifyOTP(email, otp, 'registration');
     if (!success) {
         console.log(message);
         return res.status(400).json({ message });
@@ -97,8 +97,8 @@ const verifyRegistrationOTP = async(req, res) => {
 
         await newUser.save();
         await TempUser.destroy({ where: { email: email } });
-       
-        return res.status(200).json({success: true, message: `${tempUser.role} registered successfully`});
+
+        return res.status(200).json({ success: true, message: `${tempUser.role} registered successfully` });
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }

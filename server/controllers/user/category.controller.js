@@ -1,15 +1,15 @@
 const Category = require('../../models/Category');
 const Product = require('../../models/Product');
 const { QueryTypes, Op } = require('sequelize');
-const sequelize  = require('../../config/db');
+const sequelize = require('../../config/db');
 
-const getCategoryTreeOptimizedWithMap = async (parentId, level=2) => {
+const getCategoryTreeOptimizedWithMap = async (parentId, level = 2) => {
     const allCategories = await Category.findAll({
         attributes: ['id', 'name', 'parent_id', 'is_leaf', 'thumbnail_url', 'url_path'],
         raw: true,
     });
 
-//    console.log('All categories:', allCategories.length);
+    //    console.log('All categories:', allCategories.length);
 
     // Build a map for quick access
     const categoryMap = allCategories.reduce((map, category) => {
@@ -133,17 +133,17 @@ const getCategoryTreeWithCTE = async (parentId) => {
 const getCategoryTree = async (req, res) => {
     let { include, parent_id } = req.query;
     parent_id = parseInt(parent_id);
-    
+
 
     try {
         if (!['children', 'ancestor'].includes(include) || isNaN(parent_id)) {
             return res.status(400).json({ message: 'Invalid query parameters' });
         }
-        
+
         if (include === 'children') {
             // Fetch the children of the specified category
             let level = 1; // Level 1 for root categories
-            
+
             if (parent_id !== 0) {
                 // Check if the parent_id exists
                 const parentCategory = await Category.findByPk(parent_id, {
@@ -219,8 +219,8 @@ const fetchProducts = async (categoryIds, limit, offset, filters, sortOption) =>
     if (filters.rating) {
         if (filters.rating.length === 1) {
             where.rating_average = {
-            [Op.gte]: filters.rating[0],
-        //    [Op.lte]: filters.rating[0] + 1
+                [Op.gte]: filters.rating[0],
+                //    [Op.lte]: filters.rating[0] + 1
             };
         } else {
             const minRating = Math.min(...filters.rating);
@@ -228,7 +228,7 @@ const fetchProducts = async (categoryIds, limit, offset, filters, sortOption) =>
             where.rating_average = {
                 [Op.between]: [minRating, maxRating],
             };
-        }   
+        }
     }
 
     if (filters.price) {
@@ -265,7 +265,7 @@ const fetchProducts = async (categoryIds, limit, offset, filters, sortOption) =>
 
     const count = await Product.count({ where });
 
-    return {count, rows: products};
+    return { count, rows: products };
 };
 
 // GET /api/categories/listings?limit=20&category=0&page=1&sort=top_seller|default(popular)|newest|price,asc|price,des&rating=5,4&price=8000,4000000
@@ -278,7 +278,7 @@ const getProductsByCategory = async (req, res) => {
         rating,
         price,
     } = req.query;
-    
+
     const params = { limit, page, categoryId, sort, rating, price };
 
     // Parse limit and page as integers, fallback to default values if not invalid
@@ -302,8 +302,8 @@ const getProductsByCategory = async (req, res) => {
     // Parse price filter
     const parsedPrice = price ? price.split(',').map(p => parseInt(p, 10)).filter(p => !isNaN(p)) : null;
 
-    if (parsedPrice  && parsedPrice.length !== 2) {
-    //    console.log('Price filter must have 2 values');
+    if (parsedPrice && parsedPrice.length !== 2) {
+        //    console.log('Price filter must have 2 values');
         return res.status(400).json({ message: 'Price filter must have 2 values' });
     }
 
@@ -311,7 +311,7 @@ const getProductsByCategory = async (req, res) => {
         const categoryIds = await fetchAllCategoryIds(parsedCategoryId);
         // Add the parent category ID to the list
         categoryIds.push(parsedCategoryId);
-    //    console.log('Category IDs:', categoryIds);
+        //    console.log('Category IDs:', categoryIds);
 
         if (categoryIds.length === 0) {
             return res.status(200).json({ data: [], total: 0 });
@@ -324,7 +324,7 @@ const getProductsByCategory = async (req, res) => {
             { rating: parsedRating, price: parsedPrice },
             sort,
         );
-        
+
         // Respond with pagination metadata and product data
         res.json({
             data,
@@ -335,7 +335,7 @@ const getProductsByCategory = async (req, res) => {
                 total_pages: Math.ceil(total / parsedLimit),
                 per_page: parsedLimit,
                 total,
-            }, 
+            },
             params,
         });
     } catch (error) {

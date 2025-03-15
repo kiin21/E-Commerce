@@ -33,9 +33,9 @@ const Voucher = sequelize.define('voucher', {
         references: {
             model: 'product', // Reference to the Users table
             key: 'id'
-        }, 
+        },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE', 
+        onDelete: 'CASCADE',
     },
 }, {
     tableName: 'voucher',

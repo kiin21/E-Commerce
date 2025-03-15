@@ -69,7 +69,7 @@ const createOrder = async (req, res) => {
         });
     }
 };
-  
+
 const captureOrder = async (req, res) => {
     const { orderId } = req.body;
     try {

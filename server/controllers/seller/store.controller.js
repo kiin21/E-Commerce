@@ -15,11 +15,11 @@ const getStore = async (req, res) => {
             // Generate a unique store_id
             let store_id;
             let storeExists = true;
-            
+
             // Loop to generate a unique store_id
             while (storeExists) {
                 store_id = Math.floor(Math.random() * 1000000);  // Generate random store_id (you can adjust the range as needed)
-                
+
                 // Check if store_id already exists
                 const existingStore = await Seller.findOne({ where: { store_id } });
                 if (!existingStore) {
@@ -35,15 +35,15 @@ const getStore = async (req, res) => {
             store = await Seller.create({
                 id: seller_id,
                 user_id: idAccount,
-                name: '',  
-                avg_rating_point: 0,        
-                icon: '',  
-                info: {},  
-                review_count: 0,       
-                store_id,                 
-                total_follower: 0,        
-                url: '',    
-                is_official: false,        
+                name: '',
+                avg_rating_point: 0,
+                icon: '',
+                info: {},
+                review_count: 0,
+                store_id,
+                total_follower: 0,
+                url: '',
+                is_official: false,
             });
 
             // Update the seller info with the store_id

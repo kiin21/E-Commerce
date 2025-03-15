@@ -13,9 +13,9 @@ const OTP = sequelize.define('OTP', {
         references: {
             model: 'Users', // Reference to the Users table
             key: 'id'
-        }, 
+        },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE', 
+        onDelete: 'CASCADE',
     },
     email: {
         type: DataTypes.STRING,
@@ -28,7 +28,7 @@ const OTP = sequelize.define('OTP', {
     otp: {
         type: DataTypes.STRING,
         allowNull: false,
-    },  
+    },
     expiresAt: {
         type: DataTypes.DATE,
         allowNull: false,

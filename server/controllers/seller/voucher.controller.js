@@ -21,7 +21,7 @@ let createVoucher = async (req, res) => {
 
         const storeId = seller.store_id;
         req.body.store_id = storeId;
-        
+
         const voucherData = req.body;
         console.log(voucherData);
         const newVoucher = await Voucher.create(voucherData);
@@ -103,14 +103,14 @@ let getAllVouchers = async (req, res) => {
 
         const vouchers = await Voucher.findAll({
             where: {
-                store_id : storeId
+                store_id: storeId
             },
             limit: limit,
             offset: offset,
         });
 
         const totalVouchers = await Voucher.count({
-            where: { store_id : storeId }
+            where: { store_id: storeId }
         });
         res.status(200).json({
             message: "Vouchers retrieved successfully!",

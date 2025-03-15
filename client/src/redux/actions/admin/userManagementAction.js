@@ -2,7 +2,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import * as error from "antd";
-const { useAxiosPrivate } = require('../../../hooks/useAxiosPrivate');
+import { useAxiosPrivate } from'../../../hooks/useAxiosPrivate';
 
 const axios = useAxiosPrivate;
 

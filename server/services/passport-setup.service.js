@@ -16,7 +16,7 @@ passport.use(new GoogleStrategy({
 
         if (!user) {
             // check if user already exists by email
-            user = await User.findOne({where : { email: profile.emails[0].value }});
+            user = await User.findOne({ where: { email: profile.emails[0].value } });
             if (user) {
                 user.googleId = profile.id;
                 await user.save();

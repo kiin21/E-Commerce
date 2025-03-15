@@ -2,7 +2,7 @@ const OTP = require('../models/OTP');
 const crypto = require('crypto');
 const moment = require('moment');
 
-const generateOTP = async (userId, email, purpose) => { 
+const generateOTP = async (userId, email, purpose) => {
     // Generate OTP (6-digit number) but save it as a string
     const otp = crypto.randomInt(100000, 999999).toString();
     console.log(userId, email, purpose);
@@ -10,7 +10,7 @@ const generateOTP = async (userId, email, purpose) => {
     // Check if an OTP already exists for the user
     try {
         const existingOTP = await OTP.findOne({ where: { email, purpose } });
-    
+
         if (existingOTP) {
             // Update the existing OTP
             existingOTP.otp = otp;

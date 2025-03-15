@@ -30,11 +30,11 @@ const handleLogin = async (req, res) => {
     if (typeof type !== 'string' || typeof user.role !== 'string') {
         return res.status(400).json({ message: 'invalid credentials' });
     }
-    
+
     if (type.trim().toLowerCase() !== user.role.trim().toLowerCase()) {
         return res.status(401).json({ message: 'invalid credentials' });
     }
-        
+
     // check the user type
     if (type.toLowerCase() !== user.role.toLowerCase()) {
         return res.status(401).json({ message: 'invalid credentials' });

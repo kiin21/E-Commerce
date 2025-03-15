@@ -2,7 +2,7 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); // Đường dẫn đến file cấu hình Sequelize
 
-class OrderItem extends Model {}
+class OrderItem extends Model { }
 
 OrderItem.init(
     {

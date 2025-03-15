@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const resetPassword = async (req, res) => {
     const { email, newPassword } = req.body;
-    
+
     if (!email || !newPassword) {
         return res.status(400).json({ message: 'Email and new password are required' });
     }
@@ -22,9 +22,9 @@ const resetPassword = async (req, res) => {
         // Update the user's password
         user.password = hashedPassword;
         await user.save();
-        
+
         return res.status(200).json({ message: 'Password reset successfully' });
-        
+
     } catch (error) {
         return res.status(500).json({ message: 'Failed to reset password. Please try again later' });
     }

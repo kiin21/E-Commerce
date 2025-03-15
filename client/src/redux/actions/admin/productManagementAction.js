@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-const { useAxiosPrivate } = require('../../../hooks/useAxiosPrivate');
+import { useAxiosPrivate } from'../../../hooks/useAxiosPrivate';
 
 const axios = useAxiosPrivate;
 

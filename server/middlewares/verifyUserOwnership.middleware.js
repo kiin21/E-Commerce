@@ -10,7 +10,7 @@ const verifyUserOwnership = async (req, res, next) => {
     if (userIdFromToken === userIdFromParams) {
         return next();
     }
-    
+
     return res.status(403).json({ message: 'Access denied: You can only access your own account.' });
 };
 

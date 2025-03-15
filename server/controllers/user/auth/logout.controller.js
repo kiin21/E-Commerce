@@ -12,7 +12,7 @@ const handleLogout = async (req, res) => {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    const user = await User.findOne({ where: { refreshToken: refreshToken } });   
+    const user = await User.findOne({ where: { refreshToken: refreshToken } });
     if (!user) {
         res.clearCookie('refreshToken',
             {
@@ -22,7 +22,7 @@ const handleLogout = async (req, res) => {
             }
         );
         return res.status(204).json({ message: 'No content' });
-        
+
     }
 
     user.refreshToken = null;

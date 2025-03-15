@@ -44,8 +44,8 @@ const getAllProductsByStoreId = async (req, res) => {
         const dbSortField = sortField === 'category'
             ? 'category_name'
             : sortField === 'rating'
-            ? 'rating_average'
-            : sortField;
+                ? 'rating_average'
+                : sortField;
 
         const totalCount = await Product.count({ where: whereCondition });
 
@@ -132,7 +132,7 @@ const deleteMultipleProducts = async (req, res) => {
 
         const result = await Product.destroy({
             where: {
-                id: ids, 
+                id: ids,
             },
         });
 
@@ -158,7 +158,7 @@ const addProductToStore = async (req, res) => {
             }
         });
 
-        if(!seller) {
+        if (!seller) {
             return res.status(400).json({ message: 'Không tìm thấy seller' });
         }
 
@@ -198,7 +198,7 @@ const getProductById = async (req, res) => {
                 'name',
                 'category_id',
                 'category_name',
-                'images', 
+                'images',
                 'discount_rate',
                 'original_price',
                 'short_description',
@@ -226,13 +226,13 @@ const getProductById = async (req, res) => {
             name: product.name,
             category_id: product.category_id,
             category_name: product.category_name,
-            thumbnails, 
+            thumbnails,
             discount_rate: product.discount_rate,
             original_price: product.original_price,
             short_description: product.short_description,
             description: product.description,
             quantity_sold: product.quantity_sold,
-            specifications: product.specifications, 
+            specifications: product.specifications,
             rating_average: product.rating_average,
             price: product.price,
             inventory_status: product.inventory_status,

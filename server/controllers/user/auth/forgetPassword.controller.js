@@ -3,7 +3,7 @@ const User = require('../../../models/User');
 
 const sendResetLink = async (req, res) => {
     const { email } = req.body;
-    
+
     if (!email) {
         return res.status(400).json({ message: 'Email is required' });
     }
@@ -21,7 +21,7 @@ const sendResetLink = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: 'Failed to send password reset link. Please try again later' });
     }
-    
+
 };
 
 module.exports = { sendResetLink };

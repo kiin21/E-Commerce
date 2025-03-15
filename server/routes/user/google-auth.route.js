@@ -10,7 +10,7 @@ router.get('/', passport.authenticate('google', {
 }));
 
 // Google OAuth callback route
-router.get('/callback', passport.authenticate('google',{failureRedirect: `${WEB_URL}/auth/login`}),
+router.get('/callback', passport.authenticate('google', { failureRedirect: `${WEB_URL}/auth/login` }),
     async (req, res) => {
         const accessToken = generateAccessToken(req.user);
         const refreshToken = generateRefreshToken(req.user);

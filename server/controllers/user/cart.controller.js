@@ -14,7 +14,7 @@ const getCartItems = async (req, res) => {
                     cartItems: [],
                 });
             }
-        
+
             // Fetch product details for each item in the cart
             const productIds = req.session.cart.map((item) => item.product_id);
             const products = await Product.findAll({
@@ -23,7 +23,7 @@ const getCartItems = async (req, res) => {
                         [Op.in]: productIds,
                     },
                 },
-            //    attributes: ['id', 'name', 'price', 'thumbnail_url', 'images', 'current_seller'],
+                //    attributes: ['id', 'name', 'price', 'thumbnail_url', 'images', 'current_seller'],
             });
 
             const productMap = products.reduce((map, product) => {
@@ -53,7 +53,7 @@ const getCartItems = async (req, res) => {
         // check req.session.cart is deleted
         console.log('req.session.cart: ', req.session.cart);
 
-    //    console.log('req.user: ', req.user);
+        //    console.log('req.user: ', req.user);
         // Handle database cart for authenticated users
         const cart = await Cart.findOne({
             where: {
@@ -75,7 +75,7 @@ const getCartItems = async (req, res) => {
             include: {
                 model: Product,
                 as: 'product',
-            //    attributes: ['name', 'price', 'qty', 'thumbnail_url', 'current_seller'],
+                //    attributes: ['name', 'price', 'qty', 'thumbnail_url', 'current_seller'],
                 required: true,
             },
             order: [
@@ -150,7 +150,7 @@ const addToCartItem = async (req, res) => {
         if (cartItems) {
             length = cartItems.length;
         }
-        
+
         // If item not found in cart, add it
         if (!cartItem) {
             const newCartItem = await CartItems.create({
@@ -165,10 +165,10 @@ const addToCartItem = async (req, res) => {
                 length: length + 1,
             });
         }
-    
+
         cartItem.quantity += quantity;
         await cartItem.save();
-        
+
         return res.status(200).json({
             success: true,
             cartItem,
@@ -191,35 +191,35 @@ const mergeSessionCartToDatabase = async (req, res) => {
     }
 
     try {
-        
-            const sessionCart = req.session.cart;
 
-            for (const item of sessionCart) {
-                const { itemId, quantity, selected } = item;
-                
-                const cartItem = await CartItems.findOne({
-                    where: {
-                        cart_id: req.user.cart_id,
-                        product_id: itemId,
-                        is_deleted: false,
-                    },
+        const sessionCart = req.session.cart;
+
+        for (const item of sessionCart) {
+            const { itemId, quantity, selected } = item;
+
+            const cartItem = await CartItems.findOne({
+                where: {
+                    cart_id: req.user.cart_id,
+                    product_id: itemId,
+                    is_deleted: false,
+                },
+            });
+
+            if (!cartItem) {
+                await CartItems.create({
+                    cart_id: req.user.cart_id,
+                    product_id: itemId,
+                    quantity,
+                    selected,
                 });
-
-                if (!cartItem) {
-                    await CartItems.create({
-                        cart_id: req.user.cart_id,
-                        product_id: itemId,
-                        quantity,
-                        selected,
-                    });
-                }
-                else {
-                    cartItem.quantity += quantity;
-                    await cartItem.save();
-                }
             }
-        
-        
+            else {
+                cartItem.quantity += quantity;
+                await cartItem.save();
+            }
+        }
+
+
         // Clear session cart after merging
         req.session.cart = [];
         console.log('req.session.cart: ', req.session.cart);
@@ -252,7 +252,7 @@ const updateCartItem = async (req, res) => {
             }
 
             const cartItem = req.session.cart.find((item) => item.product_id === parseInt(itemId, 10));
-            
+
             if (!cartItem) {
                 return res.status(404).json({
                     success: false,
@@ -311,7 +311,7 @@ const updateCartItem = async (req, res) => {
 
 const deleteCartItem = async (req, res) => {
     const { itemIds } = req.body;
-    
+
     const parsedItemIds = itemIds.map((id) => parseInt(id, 10));
 
     try {
@@ -375,7 +375,7 @@ const getCartSummary = async (req, res) => {
                     if (item.selected) {
                         summary.total_items += item.quantity;
                         summary.total_price += item.quantity * item.price;
-                    }   
+                    }
                     return summary;
                 },
                 {
@@ -383,7 +383,7 @@ const getCartSummary = async (req, res) => {
                     total_price: 0,
                 }
             );
-           
+
             return res.status(200).json({
                 success: true,
                 cartSummary,

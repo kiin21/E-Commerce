@@ -7,7 +7,7 @@ const sequelize = require('../../config/db');
 // ?page=1&limit=10?status='pending'||'processing'||'cancelled'||'delivered'||''
 const getOrders = async (req, res) => {
     const { status } = req.query;
-    
+
     // convert to int
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -94,7 +94,7 @@ const createOrder = async (req, res) => {
                     user_id: req.user.id,
                     total_amount: parseFloat(totalAmount),
                     shipping_address: shippingAddress,
-                    payment_method: (paymentMethod === 'cash') ? paymentMethod  : 'card',
+                    payment_method: (paymentMethod === 'cash') ? paymentMethod : 'card',
                     status: (paymentMethod === 'cash') ? 'processing' : 'pending',
                 },
                 { transaction: t }
@@ -174,7 +174,7 @@ const getUserOrders = async (req, res) => {
     const { status } = req.query; // Optional filter by status
 
     // if status === 'all' then return all orders
- //   console.log('status', status);
+    //   console.log('status', status);
     try {
         // Build query filters
         const filters = { user_id: userId };
@@ -182,7 +182,7 @@ const getUserOrders = async (req, res) => {
             filters.status = status;
         }
 
-    //    console.log('filters', filters);
+        //    console.log('filters', filters);
 
         // Fetch orders with associated items and products
         const orders = await Order.findAndCountAll({
@@ -198,14 +198,14 @@ const getUserOrders = async (req, res) => {
                         {
                             model: Product,
                             as: 'product',
-                        //    attributes: ['id', 'name', 'thumbnail_url'], // Adjust fields as needed
+                            //    attributes: ['id', 'name', 'thumbnail_url'], // Adjust fields as needed
                         },
                     ],
                 },
             ],
         });
-        
-    //    console.log('orders', orders);
+
+        //    console.log('orders', orders);
 
         // Calculate total pages for pagination
         const totalPages = Math.ceil(orders.count / limit);

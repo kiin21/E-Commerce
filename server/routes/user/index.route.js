@@ -22,7 +22,7 @@ const userRoutes = (app) => {
     app.use('/api/payment', require('./payment.route'));
 
     app.use('/api/cart', attachOrCreateCartId, require('./cart.route'));
-    
+
     // Routes for store
     app.use('/api/store', require('./store.route'));
 
@@ -31,7 +31,7 @@ const userRoutes = (app) => {
 
     app.use('/api/users', attachOrCreateCartId, require('./users.route'));
 
-    app.use('/api/orders', require('./order.route'));   
+    app.use('/api/orders', require('./order.route'));
 
     app.use('/api/cart', attachOrCreateCartId, require('./cart.route'));
 

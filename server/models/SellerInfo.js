@@ -9,31 +9,31 @@ const SellerInfo = sequelize.define('SellerInfo', {
   },
   store_id: {
     type: DataTypes.INTEGER,
-    allowNull: true, 
+    allowNull: true,
   },
   phone: {
-    type: DataTypes.TEXT,  
-    allowNull: true,  
+    type: DataTypes.TEXT,
+    allowNull: true,
   },
   address: {
     type: DataTypes.TEXT,
-    allowNull: true, 
+    allowNull: true,
   },
   working_time: {
     type: DataTypes.TEXT,
-    allowNull: true,  
+    allowNull: true,
   },
   payment_info: {
-    type: DataTypes.TEXT,  
-    allowNull: true,  
+    type: DataTypes.TEXT,
+    allowNull: true,
   },
   logo: {
-    type: DataTypes.TEXT,  
-    allowNull: true,  
+    type: DataTypes.TEXT,
+    allowNull: true,
   },
   description: {
-    type: DataTypes.TEXT,  
-    allowNull: true, 
+    type: DataTypes.TEXT,
+    allowNull: true,
   },
   user_id: {
     type: DataTypes.INTEGER,

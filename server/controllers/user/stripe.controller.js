@@ -2,7 +2,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const createPaymentSession = async (req, res) => {
     const { cartItems, totalPrice, successUrl, cancelUrl } = req.body;
-//    console.log('req.body: ', req.body);
+    //    console.log('req.body: ', req.body);
     try {
         const lineItems = cartItems.map((item) => ({
             price_data: {

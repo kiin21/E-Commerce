@@ -208,7 +208,7 @@ const getPotentialCustomer = async (req, res) => {
           attributes: ['id', 'username', 'email'],
         },
       ],
-      where : {
+      where: {
         status: 'shipped',  //shipped
       },
     });
@@ -221,12 +221,12 @@ const getPotentialCustomer = async (req, res) => {
 
     const groupedUsers = orders.reduce((acc, order) => {
       const userId = order.user_id;
-    
+
       // Tính tổng spending của từng order
       const orderTotal = order.orderItems.reduce((total, item) => {
         return total + parseFloat(item.price) * item.quantity;
       }, 0);
-    
+
       // Gộp theo user_id
       if (!acc[userId]) {
         acc[userId] = {
@@ -237,7 +237,7 @@ const getPotentialCustomer = async (req, res) => {
           orders: []
         };
       }
-    
+
       acc[userId].totalSpending += orderTotal;
       acc[userId].orders.push({
         orderId: order.id,
@@ -245,13 +245,13 @@ const getPotentialCustomer = async (req, res) => {
         createdAt: order.created_at,
         updatedAt: order.updated_at
       });
-    
+
       return acc;
     }, {});
-    
+
     // Chuyển từ object sang array nếu cần
     const result = Object.values(groupedUsers);
-    
+
     // Trả về kết quả
     res.status(200).json({
       message: 'Orders with spending fetched successfully',
@@ -309,7 +309,7 @@ const getMonthlyRevenue = async (req, res) => {
           required: true, // Chỉ lấy các Order có OrderItem phù hợp
         },
       ],
-      where : {
+      where: {
         status: 'shipped',  //
       },
     });
@@ -325,14 +325,14 @@ const getMonthlyRevenue = async (req, res) => {
         !isNaN(createdAt) && createdAt.getFullYear() === selectedYear
           ? order.orderItems.reduce((total, item) => total + item.price * item.quantity, 0)
           : 0;
-    
+
       return {
         spending,
         createdAt: order.created_at,
         updatedAt: order.updated_at,
       };
     });
-    
+
 
     const getMonthName = (date) => {
       const monthNames = [
@@ -341,11 +341,11 @@ const getMonthlyRevenue = async (req, res) => {
       const monthIndex = new Date(date).getMonth();
       return monthNames[monthIndex];
     };
-    
+
     // Function to transform the data
     const transformData = (data) => {
       const monthlyData = {};
-    
+
       // Loop through each entry and aggregate spending by month
       data.forEach((entry) => {
         const month = getMonthName(entry.createdAt);
@@ -354,18 +354,18 @@ const getMonthlyRevenue = async (req, res) => {
         }
         monthlyData[month] += entry.spending;
       });
-    
+
       // Ensure all months are represented, even with zero spending
       const allMonths = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
       ];
-      
+
       return allMonths.map((month) => ({
         month: month,
         value: monthlyData[month] || 0
       }));
     };
-    
+
     // Transform the data
     const formattedData = transformData(result);
 

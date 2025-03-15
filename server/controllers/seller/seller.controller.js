@@ -99,7 +99,7 @@ let getTotalProducts = async (req, res) => {
 
     try {
         const products = await Product.findAll({
-            where: { 
+            where: {
                 'current_seller.store_id': storeId
             },
             attributes: ['id', 'name'] // return only id and name
@@ -108,7 +108,7 @@ let getTotalProducts = async (req, res) => {
             res.status(200).json({
                 message: 'Total products fetched successfully',
                 totalProducts: products.length
-        });
+            });
         } else {
             res.status(404).json({ message: 'No products found' });
         }
@@ -177,7 +177,7 @@ let getTotalReviews = async (req, res) => {
 
     try {
         const seller = await Seller.findOne({
-            where: { 
+            where: {
                 store_id: storeId
             },
             attributes: ['review_count']
@@ -186,7 +186,7 @@ let getTotalReviews = async (req, res) => {
             res.status(200).json({
                 message: 'Total reviews fetched successfully',
                 totalReviews: seller.review_count
-        });
+            });
         } else {
             res.status(404).json({ message: 'No reviews found' });
         }
