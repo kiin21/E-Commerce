@@ -2,7 +2,9 @@ import React from 'react';
 import BestSellerItem from './BestSellerItem';
 import { RightOutlined } from '@ant-design/icons';
 
-const BestSeller = () => {
+const BestSeller = ({
+    title, 
+}) => {
     const products = [
         {
             id: 1,

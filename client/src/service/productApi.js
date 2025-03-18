@@ -1,19 +1,19 @@
 import axios from '../config/axios';
 
-const getTopDeals = async ({ limit = 36, page = 1 } = {}) => {
-    const response = await axios.get(`api/products/top_deals?limit=${limit}&page=${page}`);
-    return response.data.data;
-};
+// const getTopDeals = async ({ limit = 36, page = 1 } = {}) => {
+//     const response = await axios.get(`api/products/top_deals?limit=${limit}&page=${page}`);
+//     return response.data.data;
+// };
 
 const getTopDealsv2 = async ({ limit = 12, page = 1 } = {}) => {
     const response = await axios.get(`api/products/top_deals?limit=${limit}&page=${page}`);
     return response.data;
 };
 
-const getFlashSale = async ({ limit = 36, page = 1 } = {}) => {
-    const response = await axios.get(`api/products/flash_sale?limit=${limit}&page=${page}`);
-    return response.data.data;
-};
+// const getFlashSale = async ({ limit = 36, page = 1 } = {}) => {
+//     const response = await axios.get(`api/products/flash_sale?limit=${limit}&page=${page}`);
+//     return response.data.data;
+// };
 
 const getFlashSalev2 = async ({ limit = 12, page = 1 } = {}) => {
     const response = await axios.get(`api/products/flash_sale?limit=${limit}&page=${page}`);
@@ -22,7 +22,7 @@ const getFlashSalev2 = async ({ limit = 12, page = 1 } = {}) => {
 
 const getFeaturedProducts = async ({ limit = 36, page = 1 } = {}) => {
     const response = await axios.get(`api/products/featured?limit=${limit}&page=${page}`);
-    return response.data.data;
+    return response.data;
 };
 
 const fetchProductByCategory = async (
@@ -105,13 +105,11 @@ const fetchRelatedProducts = async (id) => {
 };
 
 export {
-    getTopDeals,
     getTopDealsv2,
-    getFlashSale,
     getFlashSalev2,
+    getFeaturedProducts,
     fetchProductByCategory,
     fetchProductById,
     fetchProductReviews,
     fetchRelatedProducts,
-    getFeaturedProducts
 };

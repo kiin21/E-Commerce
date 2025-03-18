@@ -433,8 +433,8 @@ const getSuggestions = async (req, res) => {
 // GET /api/products/top_deals?limit=36&page=1
 const getTopDeals = async (req, res) => {
     try {
-        const limit = parseInt(req.query.limit, 10) || 36; // Items per page
-        const MAX_PRODUCTS = 400; // Restrict to 400 products across all pages
+        const limit = parseInt(req.query.limit, 10) || 36;
+        const MAX_PRODUCTS = 400;
 
         const page = parseInt(req.query.page, 10) || 1; // Default to page 1
 
@@ -541,6 +541,62 @@ const getFlashSale = async (req, res) => {
     }
 };
 
+
+// GET /api/products/featured-product?limit=36&page=1
+const getFeaturedProduct = async (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit, 10) || 36;
+        const MAX_PRODUCTS = 400;
+
+        const requestedPage = parseInt(req.query.page, 10) || 1; // Default to page 1
+        const offset = (requestedPage - 1) * limit;
+
+        // Get total count of products matching the criteria
+        const productCount = await Product.count({
+            where: {
+                inventory_status: 'available', // Ensure the product is in stock
+            },
+        });
+
+        const restrictedCount = Math.min(productCount, MAX_PRODUCTS); // Cap total items at MAX_PRODUCTS
+        const total_pages = Math.ceil(restrictedCount / limit); // Calculate pages based on restricted count
+
+        // Cap the requested page to ensure it does not exceed total_pages
+        const current_page = Math.min(requestedPage, total_pages);
+
+        const flashSale = await Product.findAll({
+            where: {
+                discount_rate: {
+                    [Op.gt]: 10, // Only products with a discount
+                },
+                inventory_status: 'available', // Ensure the product is in stock
+            },
+            order: [
+                ['quantity_sold', 'DESC'],
+                ['rating_average', 'DESC'],
+            ],
+            limit: limit,
+            offset: offset,
+        });
+
+        return res.status(200).json({
+            data: flashSale,
+            paging: {
+                current_page: current_page,
+                total_items: restrictedCount,
+                total_pages: total_pages,
+                items_per_page: limit,
+                from: (current_page - 1) * limit + 1,
+                to: Math.min(current_page * limit, restrictedCount),
+            },
+            title: 'Flash Sale',
+        });
+    } catch (error) {
+        console.error('Error fetching flash sale:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};
+
 // [GET] /api/products/:id/related
 let getRelatedProducts = async (req, res) => {
     try {
@@ -598,30 +654,6 @@ let getRelatedProducts = async (req, res) => {
     }
 };
 
-const Sequelize = require('../../config/db');
-
-const getSomeProducts = async (req, res) => {
-    try {
-        const products = await Product.findAll({
-            where: {
-                inventory_status: 'available',
-            },
-            order: [
-                Sequelize.literal('RANDOM()')
-            ],
-            limit: 80,
-        });
-
-        return res.status(200).json({
-            data: products,
-            title: 'Magic',
-        });
-    } catch (error) {
-        console.error('Error fetching magic:', error);
-        return res.status(500).json({ message: 'Server error' });
-    }
-};
-
 module.exports = {
     createNewProduct,
     getAllProducts,
@@ -634,5 +666,5 @@ module.exports = {
     getTopDeals,
     getFlashSale,
     getRelatedProducts,
-    getSomeProducts,
+    getFeaturedProduct,
 };

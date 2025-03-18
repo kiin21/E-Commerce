@@ -18,6 +18,7 @@ import CategoryWithProducts from "./components/user/CategoryWithProducts.jsx";
 import ProductDetails from "./components/user/ProductDetails.jsx";
 import TopDealsPage from "./pages/user/TopDealsPage.jsx";
 import FlashSalePage from "./pages/user/FlashSalePage.jsx";
+import FeaturedProductPage from "./pages/user/FeaturedProductPage.jsx";
 import OrderManagement from "./pages/user/OrderManagement.jsx";
 import AccountInfo from "./pages/user/AccountInfo.jsx";
 
@@ -67,6 +68,7 @@ const App = () => {
                     <Route index element={<Home />} />
                     <Route path="/top-deals" element={<TopDealsPage />} />
                     <Route path="/flash-sale" element={<FlashSalePage />} />
+                    <Route path="/featured-products" element={<FeaturedProductPage />} />
                     <Route path="/search/:keyword" element={<Search />} />
                     <Route path="category/:url_key/:id" element={<CategoryWithProducts />} />
                     <Route path="product/:url_key" element={<ProductDetails />} />
