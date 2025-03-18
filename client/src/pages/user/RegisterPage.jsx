@@ -20,7 +20,7 @@ const Register = () => {
     const [disable, setDisable] = useState(true);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { user, error, loading, success } = useSelector(selectAuth);
+    const {error, loading, success } = useSelector(selectAuth);
     const type = new URLSearchParams(location.search).get('type') || 'user';
 
 
@@ -113,8 +113,7 @@ const Register = () => {
         <div className="bg-white p-8 relative w-96">
             <h2 className="font-semibold text-xl text-center mb-8">
                 Register
-                {type && <span className="font-semibold text-xl text-center mb-8"> as {type}</span>
-                }
+                {type && <span className="font-semibold text-xl text-center mb-8"> as {type}</span>}
             </h2>
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
             <form onSubmit={handleSubmit} className="flex flex-col space-y-6 max-w-sm mx-auto">
