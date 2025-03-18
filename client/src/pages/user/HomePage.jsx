@@ -1,7 +1,7 @@
 import { Suspense, lazy, useState, useEffect } from 'react';
 import BestSeller from "../../components/user/BestSeller";
 import ProductSlider from '../../components/user/ProductSlider';
-import { getTopDealsv2, getFlashSalev2, getFeaturedProducts } from '../../service/productApi';
+import { getTopDealsv2, getFlashSalev2, getFeaturedProducts, getBestSellerProduct } from '../../service/productApi';
 import { Spin } from 'antd';
 // Lazy-load Category component
 const Category = lazy(() => import("../../components/user/Category"));
@@ -10,6 +10,7 @@ const Home = () => {
     const [topDeals, setTopDeals] = useState([]);
     const [flashSale, setFlashSale] = useState([]);
     const [featuredProducts, setFeaturedProducts] = useState([]);
+    const [bestSellerProds, setbestSellerProds] = useState([]);
 
     useEffect(() => {
 
@@ -28,9 +29,15 @@ const Home = () => {
             setFeaturedProducts(data.data);
         };
 
+        const fetchBestSellerProduct = async () => {
+            const data = await getBestSellerProduct();
+            setbestSellerProds(data.data);
+        };
+
         fetchTopDeals();
         fetchFlashSale();
         fetchFeaturedProducts();
+        fetchBestSellerProduct();
     }, []);
 
     return (
@@ -66,7 +73,10 @@ const Home = () => {
                 chunkedSize={10}
             />}
 
-            <BestSeller />
+            <BestSeller
+                title= "Sản phẩm bán chạy"
+                products={bestSellerProds}
+            />
         </div>
     );
 };

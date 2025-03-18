@@ -13,7 +13,12 @@ router.get('/', (req, res, next) => {
     }
 });
 
-router.get('/featured', productController.getFeaturedProduct); // method GET - Read
+// [GET] /products/featured
+router.get('/featured', productController.getFeaturedProduct);
+
+// [GET] /products/bestSeller
+router.get('/bestSeller', productController.getBestSellerProduct);
+
 // [GET] /products/:id/related
 router.get('/:id/related', productController.getRelatedProducts);
 

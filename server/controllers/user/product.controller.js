@@ -541,7 +541,6 @@ const getFlashSale = async (req, res) => {
     }
 };
 
-
 // GET /api/products/featured-product?limit=36&page=1
 const getFeaturedProduct = async (req, res) => {
     try {
@@ -554,22 +553,22 @@ const getFeaturedProduct = async (req, res) => {
         // Get total count of products matching the criteria
         const productCount = await Product.count({
             where: {
-                inventory_status: 'available', // Ensure the product is in stock
+                inventory_status: 'available',
             },
         });
 
-        const restrictedCount = Math.min(productCount, MAX_PRODUCTS); // Cap total items at MAX_PRODUCTS
-        const total_pages = Math.ceil(restrictedCount / limit); // Calculate pages based on restricted count
+        const restrictedCount = Math.min(productCount, MAX_PRODUCTS);
+        const total_pages = Math.ceil(restrictedCount / limit);
 
-        // Cap the requested page to ensure it does not exceed total_pages
+
         const current_page = Math.min(requestedPage, total_pages);
 
         const flashSale = await Product.findAll({
             where: {
                 discount_rate: {
-                    [Op.gt]: 10, // Only products with a discount
+                    [Op.gt]: 10,
                 },
-                inventory_status: 'available', // Ensure the product is in stock
+                inventory_status: 'available',
             },
             order: [
                 ['quantity_sold', 'DESC'],
@@ -589,10 +588,10 @@ const getFeaturedProduct = async (req, res) => {
                 from: (current_page - 1) * limit + 1,
                 to: Math.min(current_page * limit, restrictedCount),
             },
-            title: 'Flash Sale',
+            title: 'Featured Product',
         });
     } catch (error) {
-        console.error('Error fetching flash sale:', error);
+        console.error('Error fetching featured product:', error);
         return res.status(500).json({ message: 'Server error' });
     }
 };
@@ -654,6 +653,70 @@ let getRelatedProducts = async (req, res) => {
     }
 };
 
+// GET /api/products/bestSeller?limit=36&page=1
+const getBestSellerProduct = async (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit, 10) || 36; // Items per page
+        const MAX_PRODUCTS = 400; // Restrict to 400 products across all pages
+
+        const requestedPage = parseInt(req.query.page, 10) || 1; // Default to page 1
+        const offset = (requestedPage - 1) * limit;
+
+        // Get total count of products matching the criteria
+        const productCount = await Product.count({
+            where: {
+                inventory_status: 'available', // Ensure the product is in stock
+            },
+        });
+
+        const restrictedCount = Math.min(productCount, MAX_PRODUCTS);
+        const total_pages = Math.ceil(restrictedCount / limit);
+
+        const current_page = Math.min(requestedPage, total_pages);
+
+        const flashSaleRaw = await Product.findAll({
+            where: {
+                inventory_status: 'available',
+            },
+            order: [
+                ['quantity_sold', 'DESC'],
+            ],
+            limit: limit,
+            offset: offset,
+            attributes: [
+                'id',
+                'name',
+                'price',
+                'images'
+            ]
+        });
+
+        const flashSale = flashSaleRaw.map(product => ({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.images && product.images.length > 0 ? product.images[0].thumbnail_url : 'https://placehold.co/400',
+        }));
+
+        return res.status(200).json({
+            data: flashSale,
+            paging: {
+                current_page: current_page,
+                total_items: restrictedCount,
+                total_pages: total_pages,
+                items_per_page: limit,
+                from: (current_page - 1) * limit + 1,
+                to: Math.min(current_page * limit, restrictedCount),
+            },
+            title: 'Best Seller'
+        });
+    } catch (error) {
+        console.error('Error fetching flash sale:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};
+
+
 module.exports = {
     createNewProduct,
     getAllProducts,
@@ -667,4 +730,5 @@ module.exports = {
     getFlashSale,
     getRelatedProducts,
     getFeaturedProduct,
+    getBestSellerProduct
 };
