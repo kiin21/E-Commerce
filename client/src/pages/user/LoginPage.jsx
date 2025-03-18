@@ -86,7 +86,6 @@ const Login = () => {
 
     const handleGoogleLogin = () => {
         const typeParam = encodeURIComponent(type.toLowerCase()); // Ensure the type is URL-safe
-
         window.location.href = `${SERVER_URL}/api/auth/google?type=${typeParam}`;
     };
 

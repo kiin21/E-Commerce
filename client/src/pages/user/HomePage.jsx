@@ -69,10 +69,8 @@ const Home = () => {
             />}
 
 
-
-
-            {/* <BestSeller />
-            <Recommend /> */}
+            <BestSeller />
+            <Recommend />
         </div>
     );
 };

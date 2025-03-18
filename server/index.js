@@ -37,20 +37,23 @@ app.use(cookieParser());
 
 // Express session middleware
 app.use(session({
-    secret: process.env.SESSION_SECRET,  // Change 'your-secret-key' to a secure, unique string
-    resave: false,              // Prevent session from being saved back to the store if it wasn't modified
-    saveUninitialized: false,   // Only save session data when something is stored in the session
-    cookie: { secure: true } // Use secure: true for HTTPS
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+        secure: process.env.NODE_ENV === 'production',  // Only use secure cookies in production
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
 }));
+
+// Initialize Passport after session middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Sync all models with the database before starting the server and initializing Passport
 sequelize.sync({ force: false })
     .then(() => {
         console.log('All models were synchronized successfully.');
-
-        // Initialize Passport after DB sync to ensure tables exist
-        app.use(passport.initialize());
-        app.use(passport.session());
 
         // User routes
         require('./routes/user/index.route')(app);

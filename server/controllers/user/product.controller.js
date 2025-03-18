@@ -2,8 +2,7 @@
 const Product = require('../../models/Product');
 const { Op, ValidationErrorItemOrigin } = require('sequelize');
 const sequelize = require('../../config/db');
-const { WEB_URL } = require('../../config/config');
-//const { get } = require('../../routes/user/product.route');
+const WEB_URL = process.env.WEB_URL || 'http://localhost:3000';
 
 let createNewProduct = async (req, res) => {
     try {

@@ -25,14 +25,12 @@ const userRoutes = (app) => {
     app.use('/api/store', require('./store.route'));
 
     // Middleware to verify JWT
-    app.use(verifyJWT);
 
-    app.use('/api/users', attachOrCreateCartId, require('./users.route'));
+    app.use('/api/users', verifyJWT, attachOrCreateCartId, require('./users.route'));
 
-    app.use('/api/orders', require('./order.route'));
+    app.use('/api/orders', verifyJWT, require('./order.route'));
 
-    app.use('/api/cart', attachOrCreateCartId, require('./cart.route'));
+    app.use('/api/cart', verifyJWT, attachOrCreateCartId, require('./cart.route'));
 }
 
 module.exports = userRoutes;
-

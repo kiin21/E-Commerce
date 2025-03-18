@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 const Mailgen = require('mailgen');
-const { WEB_URL } = require('../config/config');;
+const WEB_URL = process.env.WEB_URL || 'http://localhost:3000';
 
 // Link to verify email
 LINK_TO_VERIFY_EMAIL = `${WEB_URL}/auth/register/verify-otp`;

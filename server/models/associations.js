@@ -24,7 +24,6 @@ OTP.belongsTo(User, {
     onUpdate: 'CASCADE'
 });
 
-
 // Define associations Category - Product (one-to-many)
 
 Category.hasMany(Product, {

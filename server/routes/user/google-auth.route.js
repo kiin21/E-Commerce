@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('../../services/passport-setup.service');
 const router = express.Router();
-const { WEB_URL } = require('../../config/config');
+const WEB_URL = process.env.WEB_URL || 'http://localhost:3000';
 const { generateAccessToken, generateRefreshToken } = require('../../utils/jwtToken');
 
 // Google OAuth login route
@@ -14,7 +14,7 @@ router.get('/callback', passport.authenticate('google', { failureRedirect: `${WE
     async (req, res) => {
         const accessToken = generateAccessToken(req.user);
         const refreshToken = generateRefreshToken(req.user);
-        const redirectURL = `${WEB_URL}/auth/google/callback?accessToken=${accessToken}}`;
+        const redirectURL = `${WEB_URL}/api/auth/google/callback?accessToken=${accessToken}}`;
 
         req.user.refreshToken = refreshToken;
 

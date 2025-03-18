@@ -9,9 +9,6 @@ const UserLayout = () => {
             <Header />
             <NavigationBar /> 
             <Outlet/>
-            {/* <main className='flex-grow flex items-center justify-center p-4'>
-                <Outlet />
-            </main> */}
             <Footer />
         </div>
     );

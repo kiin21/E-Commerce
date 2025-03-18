@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { SearchOutlined, UserOutlined, ShoppingCartOutlined, BellOutlined, LogoutOutlined, DownOutlined } from '@ant-design/icons';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectAuth } from '../../redux/reducers/user/authReducer';
+import React, { useEffect, useState } from "react";
+import {
+    SearchOutlined,
+    UserOutlined,
+    ShoppingCartOutlined,
+    BellOutlined,
+    LogoutOutlined,
+    DownOutlined,
+} from "@ant-design/icons";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { selectAuth } from "../../redux/reducers/user/authReducer";
 import logo from "../../assets/logo.png";
-import Search from './Search';
-import { setSearchQuery } from '../../redux/reducers/user/searchReducer';
-import { getCartItems } from '../../redux/services/user/cartService';
-import { useAxiosPrivate } from '../../hooks/useAxiosPrivate';
-import { selectCartQuantity } from '../../redux/reducers/user/cartReducer';
-import { setCartQuantity } from '../../redux/reducers/user/cartReducer';
-import { logout } from '../../redux/actions/user/authAction';
+import Search from "./Search";
+import { setSearchQuery } from "../../redux/reducers/user/searchReducer";
+import { getCartItems } from "../../redux/services/user/cartService";
+import { useAxiosPrivate } from "../../hooks/useAxiosPrivate";
+import { selectCartQuantity } from "../../redux/reducers/user/cartReducer";
+import { setCartQuantity } from "../../redux/reducers/user/cartReducer";
+import { logout } from "../../redux/actions/user/authAction";
 
 function Header() {
-
     const searchQuery = useSelector((state) => state.user.search.query);
     const navigate = useNavigate();
     const { user, isAuthenticated } = useSelector(selectAuth);
@@ -32,20 +38,18 @@ function Header() {
             debugger;
             const quantity = response.cartItems.length;
 
-
             dispatch(setCartQuantity(quantity));
         };
         // check if user is authenticated before fetching cart items
-        //    if (isAuthenticated && user.role.toLowerCase() === 'user') {
-        fetchCartItems();
-        //    console.log('User: ', user);
-        //    }
+        if (isAuthenticated && user.role.toLowerCase() === "user") {
+            // fetchCartItems();
+        }
     }, []);
 
     const handleClickLogo = () => {
-        dispatch(setSearchQuery(''));
-        navigate('/');
-    }
+        dispatch(setSearchQuery(""));
+        navigate("/");
+    };
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const openMenu = () => {
@@ -57,26 +61,22 @@ function Header() {
     };
 
     const handleCartClick = () => {
-        // check if user is authenticated
-        // if (!isAuthenticated) {
-        //     return navigate('/auth/login');
-        // }
-        navigate('/checkout/cart');
-    }
+        navigate("/checkout/cart");
+    };
 
     const handleLogout = async () => {
         await dispatch(logout({ axiosPrivate }));
         // Redirect to login after logout
-        navigate('/auth/login');
-    }
+        navigate("/auth/login");
+    };
 
     const handleAccountInfoClick = () => {
-        navigate('/account/info');
-    }
+        navigate("/account/info");
+    };
 
     const handleOrderManagementClick = () => {
-        navigate('/order-management');
-    }
+        navigate("/order-management");
+    };
 
     return (
         <>
@@ -86,7 +86,6 @@ function Header() {
                     <p className="text-gray-600 hover:text-gray-800 mr-10">
                         <Link to="/auth/login?type=seller">Kênh bán hàng</Link>
                     </p>
-
 
                     {/* Wrapper for logo and text */}
                     <div className="flex flex-col items-center sm:items-start">
@@ -105,14 +104,16 @@ function Header() {
                     <Search />
 
                     {/* Conditional Rendering for User Login */}
-                    {(isAuthenticated && user.role.toLowerCase() === 'user') ? (
+                    {isAuthenticated && user.role.toLowerCase() === "user" ? (
                         <div className="flex items-center space-x-6 mt-4 sm:mt-0">
                             <div className="relative">
                                 <button
                                     className="flex items-center text-gray-600 hover:text-gray-800"
                                     onClick={handleCartClick}
                                 >
-                                    <ShoppingCartOutlined style={{ fontSize: '20px', marginRight: '12px' }} />
+                                    <ShoppingCartOutlined
+                                        style={{ fontSize: "20px", marginRight: "12px" }}
+                                    />
                                     Giỏ hàng
                                 </button>
                                 <span className="absolute -top-2 left-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -120,7 +121,9 @@ function Header() {
                                 </span>
                             </div>
                             <div className="relative">
-                                <BellOutlined style={{ fontSize: '20px', marginRight: '6px' }} />
+                                <BellOutlined
+                                    style={{ fontSize: "20px", marginRight: "6px" }}
+                                />
                                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                                     4
                                 </span>
@@ -133,16 +136,20 @@ function Header() {
                                     onMouseEnter={openMenu}
                                     className="flex items-center text-gray-600 hover:text-gray-800 font-semibold"
                                 >
-                                    <UserOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
-                                    {user?.username || 'Anonymous'}
-                                    <DownOutlined style={{ fontSize: '14px', marginLeft: '8px' }} />
+                                    <UserOutlined
+                                        style={{ fontSize: "20px", marginRight: "8px" }}
+                                    />
+                                    {user?.username || "Anonymous"}
+                                    <DownOutlined
+                                        style={{ fontSize: "14px", marginLeft: "8px" }}
+                                    />
                                 </button>
                                 {isMenuOpen && (
                                     <div
                                         className="absolute left-0 mt-2 w-52 bg-white rounded-md shadow-lg border border-gray-200 z-10"
                                         onMouseEnter={openMenu}
                                         onMouseLeave={closeMenu}
-                                        style={{ marginTop: '0', paddingTop: '8px' }} // Replace margin with padding
+                                        style={{ marginTop: "0", paddingTop: "8px" }} // Replace margin with padding
                                     >
                                         <button
                                             className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
@@ -173,7 +180,9 @@ function Header() {
                                     className="flex items-center text-gray-600 hover:text-gray-800"
                                     onClick={handleCartClick}
                                 >
-                                    <ShoppingCartOutlined style={{ fontSize: '20px', marginRight: '12px' }} />
+                                    <ShoppingCartOutlined
+                                        style={{ fontSize: "20px", marginRight: "12px" }}
+                                    />
                                     Giỏ hàng
                                 </button>
                                 <span className="absolute -top-2 left-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -183,15 +192,17 @@ function Header() {
 
                             <button
                                 className="flex items-center text-gray-600 hover:text-gray-800"
-                                onClick={() => navigate('/auth/register')}
+                                onClick={() => navigate("/auth/register")}
                             >
-                                <UserOutlined style={{ fontSize: '20px', marginRight: '8px' }} />
+                                <UserOutlined
+                                    style={{ fontSize: "20px", marginRight: "8px" }}
+                                />
                                 Đăng ký
                             </button>
                             <div className="h-6 border-l border-gray-300"></div>
                             <button
                                 className="flex items-center text-gray-600 hover:text-gray-800"
-                                onClick={() => navigate('/auth/login')}
+                                onClick={() => navigate("/auth/login")}
                             >
                                 Đăng nhập
                             </button>
