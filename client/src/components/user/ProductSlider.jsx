@@ -3,9 +3,9 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Link, useNavigate } from 'react-router-dom';
-import ProductCard from './ProductCard'; // Assuming this component exists
+import ProductCard from './ProductCard';
 
-const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale, clickable = true, chunkedSize=5 }) => {
+const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale, clickable = true, chunkedSize = 5 }) => {
     const navigate = useNavigate();
 
     if (!products || products.length === 0) {
@@ -16,7 +16,7 @@ const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale, clickable
         navigate(`/product/${product.url_key}`, { state: { product } });
     };
 
-    // Chunk the products into groups of 6
+    // Chunk the products into groups based on chunkedSize
     const chunkedProducts = [];
     for (let i = 0; i < products.length; i += chunkedSize) {
         chunkedProducts.push(products.slice(i, i + chunkedSize));
@@ -28,9 +28,9 @@ const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale, clickable
     }
 
     return (
-        <div className="mt-10 max-w-4xl mx-auto p-4 bg-blue-500 rounded-md overflow-hidden">
-            <div className="flex justify-between mb-2">
-                <h2 className="text-2xl font-semibold text-white">{title}</h2>
+        <div className="mt-10 max-w-7xl mx-auto p-4 bg-blue-500 rounded-md overflow-hidden">
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl md:text-2xl font-semibold text-white">{title}</h2>
                 {clickable ? (
                     <Link
                         to={url}
@@ -39,9 +39,7 @@ const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale, clickable
                         Xem tất cả
                     </Link>
                 ) : (
-                    <span className="text-sm text-gray-400 cursor-not-allowed">
-
-                    </span>
+                    <span className="text-sm text-gray-400 cursor-not-allowed"></span>
                 )}
             </div>
 
@@ -49,16 +47,17 @@ const ProductSlider = ({ title, products, url, isTopDeal, isFlashSale, clickable
                 modules={[Navigation]}
                 navigation
                 spaceBetween={20}
-                slidesPerView={1} // Only 1 slide visible at a time
+                slidesPerView={1}
+                className="pb-10" // Increased bottom padding for navigation arrows
             >
                 {chunkedProducts.map((productGroup, index) => (
                     <SwiperSlide key={index}>
-                        <div className="flex flex-wrap justify-center gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                             {productGroup.map((product) => (
                                 <div
                                     key={product.id}
                                     onClick={() => handleProductClick(product)}
-                                    className="flex justify-center flex-shrink-0 w-36 h-80 mr-2 bg-white cursor-pointer rounded-lg shadow-md"
+                                    className="w-full h-full"
                                 >
                                     <ProductCard
                                         image={product.thumbnail_url || product.name}

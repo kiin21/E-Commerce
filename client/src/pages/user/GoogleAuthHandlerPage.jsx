@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import useAuth from '../../hooks/useAuth';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '../../redux/reducers/user/authReducer';
 import { jwtDecode } from 'jwt-decode';
 
 const GoogleAuthHandler = () => {
     const navigate = useNavigate();
-//    const { setAuth } = useAuth();
+    const { user, isAuthenticated } = useSelector(selectAuth);
 
     useEffect(() => {
         // the backend sends back the token in the URL query string after Google login
@@ -18,14 +19,13 @@ const GoogleAuthHandler = () => {
             const userRole = decodedToken?.role;
 
             // Store token and user data in auth state
-        //    setAuth({ accessToken });
+            //    setAuth({ accessToken });
             console.log('decodedToken:', decodedToken);
             if (userRole && userRole.includes('Admin')) {
                 navigate('/Admin', { replace: true });
-            }  else if (userRole && userRole.includes('Seller')) {
+            } else if (userRole && userRole.includes('Seller')) {
                 navigate('/Seller', { replace: true });
-            }
-            else {
+            } else {
                 navigate('/', { replace: true });
             }
         }

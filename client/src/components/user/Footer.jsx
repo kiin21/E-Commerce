@@ -1,12 +1,8 @@
-import React from 'react';
+import React from "react";
 
 const Footer = () => {
-  const policies = [
-    "Chính sách bảo mật",
-    "Chính sách đổi trả",
-    "Chính sách vận chuyển",
-    "Chính sách trả hàng hoàn tiền"
-  ];
+  const policies = [];
+  const year = new Date().getFullYear();
 
   return (
     <footer className="w-full bg-white mt-8 border-t">
@@ -26,9 +22,7 @@ const Footer = () => {
 
         {/*Information */}
         <div className="text-xs text-gray-500 leading-relaxed text-center">
-          <p className="mb-2">
-            © Phát triển ứng dụng web
-          </p>
+          <p className="mb-2">{year} © Phát triển ứng dụng web</p>
         </div>
       </div>
     </footer>

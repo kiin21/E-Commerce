@@ -13,7 +13,7 @@ const userRoutes = (app) => {
 
     app.use('/api/categories', require('./category.route'));
 
-    // Google and Facebook OAuth routes
+    // Google OAuth routes
     app.use('/api/auth/google', require('./google-auth.route'));
 
     // Routes for products

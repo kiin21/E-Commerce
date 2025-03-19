@@ -687,7 +687,8 @@ const getBestSellerProduct = async (req, res) => {
                 'id',
                 'name',
                 'price',
-                'images'
+                'images',
+                'url_key'
             ]
         });
 
@@ -695,6 +696,7 @@ const getBestSellerProduct = async (req, res) => {
             id: product.id,
             name: product.name,
             price: product.price,
+            url_key: product.url_key,
             image: product.images && product.images.length > 0 ? product.images[0].thumbnail_url : 'https://placehold.co/400',
         }));
 

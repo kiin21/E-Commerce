@@ -30,7 +30,7 @@ const Home = () => {
         };
 
         const fetchBestSellerProduct = async () => {
-            const data = await getBestSellerProduct();
+            const data = await getBestSellerProduct({ limit: 10 });
             setbestSellerProds(data.data);
         };
 
@@ -44,7 +44,9 @@ const Home = () => {
         <div className="flex flex-wrap flex-col items-center mx-auto max-w-6xl">
             {/* Suspense will show fallback UI until Category is loaded */}
             <Suspense fallback={<Spin />}>
+            <div className="mt-10">
                 <Category />
+            </div>
             </Suspense>
             {/* TOP DEAL */}
             <ProductSlider

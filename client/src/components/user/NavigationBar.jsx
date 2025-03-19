@@ -70,7 +70,6 @@ const NavigationBar = () => {
 
         return (
             <div className="ml-36 text-sm font-medium flex items-center">
-                <Link to="/" className="text-blue-500 hover:underline">Shopbee</Link>
                 {
                     (url_key) && (
                         <span className="flex items-center">

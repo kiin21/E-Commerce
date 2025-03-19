@@ -7,7 +7,6 @@ import { selectAuth } from "../redux/reducers/user/authReducer";
 
 const PersistLogin = () => {
     const [isLoading, setIsLoading] = useState(true);
-    //    const { auth } = useAuth();
     const { user } = useSelector(selectAuth);
     const refreshToken = useRefreshToken();
 
@@ -28,11 +27,6 @@ const PersistLogin = () => {
         }
     }, []);
 
-
-    useEffect(() => {
-        //console.log(`isLoading: ${isLoading}`)
-        //console.log(`accessToken: ${JSON.stringify(user?.accessToken)}`)
-    }, [isLoading])
 
     return isLoading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>

@@ -14,7 +14,7 @@ router.get('/callback', passport.authenticate('google', { failureRedirect: `${WE
     async (req, res) => {
         const accessToken = generateAccessToken(req.user);
         const refreshToken = generateRefreshToken(req.user);
-        const redirectURL = `${WEB_URL}/api/auth/google/callback?accessToken=${accessToken}}`;
+        const redirectURL = `${WEB_URL}/auth/google/callback?accessToken=${accessToken}}`;
 
         req.user.refreshToken = refreshToken;
 
