@@ -55,6 +55,9 @@ sequelize.sync({ force: false })
     .then(() => {
         console.log('All models were synchronized successfully.');
 
+        // Auth routes
+        require('./routes/auth/index.router')(app);
+
         // User routes
         require('./routes/user/index.route')(app);
 

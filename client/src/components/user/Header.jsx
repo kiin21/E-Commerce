@@ -3,7 +3,6 @@ import {
     UserOutlined,
     ShoppingCartOutlined,
     BellOutlined,
-    DownOutlined,
     ShopOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -136,12 +135,6 @@ function Header() {
                                         }}
                                     />
                                     {user?.username || 'Anonymous'}
-                                    <DownOutlined
-                                        style={{
-                                            fontSize: '14px',
-                                            marginLeft: '8px',
-                                        }}
-                                    />
                                 </button>
                                 {isMenuOpen && (
                                     <div

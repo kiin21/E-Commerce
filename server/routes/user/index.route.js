@@ -1,20 +1,9 @@
-const express = require('express');
 const verifyJWT = require('../../middlewares/verifyJWT.middleware');
 const attachOrCreateCartId = require('../../middlewares/attachOrCreateCardId.middleware');
 
 const userRoutes = (app) => {
     // Routes
-    app.use('/api/auth/register', require('./register.route'));
-    app.use('/api/auth/login', require('./login.route'));
-    app.use('/api/auth/token/refresh', require('./refreshToken.route'));
-    app.use('/api/auth/logout', require('./logout.route'));
-    app.use('/api/auth/forget-password', require('./forgetPassword.route'));
-    app.use('/api/auth/reset-password', require('./resetPassword.route'));
-
     app.use('/api/categories', require('./category.route'));
-
-    // Google OAuth routes
-    app.use('/api/auth/google', require('./google-auth.route'));
 
     // Routes for products
     app.use('/api/products', require('./product.route'));
