@@ -38,7 +38,7 @@ const ProductDetails = () => {
             top: 0,
             behavior: 'smooth'
         });
-    }, [product]); // Dependency on product ensures scroll happens when product changes
+    }, [product]);
 
     if (!product) {
         return <div>No product details available. Please navigate through the product list.</div>;
@@ -79,7 +79,6 @@ const ProductDetails = () => {
             state: { cartItems }
         });
     };
-    // Scroll to top when navigating
 
     return (
         product && (

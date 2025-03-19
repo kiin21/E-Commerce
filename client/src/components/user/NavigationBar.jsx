@@ -73,6 +73,7 @@ const NavigationBar = () => {
                 {
                     (url_key) && (
                         <span className="flex items-center">
+                            <Link to="/" className='text-blue-500 hover:underline'>Shopbee</Link>
                             <span className="mx-2">/</span>
                             <span className="text-blue-500 pointer-events-none">{productName}</span>
                         </span>
@@ -81,6 +82,7 @@ const NavigationBar = () => {
                 {
                     (keyword) && (
                         <span className="flex items-center">
+                            <Link to="/" className='text-blue-500 hover:underline'>Shopbee</Link>
                             <span className="mx-2"> / </span>
                             <span className="text-blue-500 pointer-events-none"> Kết quả tìm kiếm: {keyword}</span>
                         </span>

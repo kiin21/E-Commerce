@@ -72,7 +72,6 @@ const Home = () => {
                 url="/featured-products"
                 isTopDeal={false}
                 isFlashSale={true}
-                chunkedSize={10}
             />}
 
             <BestSeller

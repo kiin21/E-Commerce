@@ -9,7 +9,7 @@ const ProductCard = ({ image, name, price, originalPrice, discountRate, quantity
                     {isTopDeal ? 'TOP DEAL' : discountRate + '% OFF'}
                 </div>
             )}
-            
+
             {/* Card Container with fixed width and height */}
             <div className="bg-white p-4 rounded-lg hover:shadow-lg transition-shadow h-full flex flex-col">
                 {/* Larger Image Container with larger aspect ratio */}
@@ -20,7 +20,7 @@ const ProductCard = ({ image, name, price, originalPrice, discountRate, quantity
                         className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                     />
                 </div>
-                
+
                 {/* Product Name */}
                 <h3 className="text-sm text-gray-800 font-medium mb-2 line-clamp-2 min-h-12">
                     {name}
@@ -40,7 +40,7 @@ const ProductCard = ({ image, name, price, originalPrice, discountRate, quantity
                         </>
                     )}
                 </div>
-                
+
                 {/* Current Price */}
                 <p className="text-red-500 font-semibold">
                     {parseInt(price).toLocaleString('vi-VN')}đ

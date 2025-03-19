@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="w-full bg-white mt-8 border-t">
       {/* Policy Links */}
-      <div className="max-w-7xl mx-auto py-6 px-4">
+      <div className="max-w-6xl mx-auto py-6 px-4">
         <div className="flex flex-wrap justify-center gap-8 mb-6">
           {policies.map((policy, index) => (
             <button

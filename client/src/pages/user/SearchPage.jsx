@@ -3,7 +3,7 @@ import ProductSearchList from "../../components/user/ProductSearchList";
 
 const Search = () => {
     return (
-        <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="max-w-6xl mx-auto px-4 py-6">
             <div className="flex gap-6">
                 {/* Filter Area */}
                 {/* <Filter /> */}
