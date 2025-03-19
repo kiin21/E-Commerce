@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: my-postgres-container
+    restart: always
+    environment:
+      POSTGRES_USER: anhkhoa
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: ecommerce
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql:ro
+      - ./init-db.sql:/docker-entrypoint-initdb.d/dump.sql:ro
+
+volumes:
+  pgdata:
